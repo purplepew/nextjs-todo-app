@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import GoogleIcon from '@mui/icons-material/Google'
 
@@ -31,7 +31,7 @@ const SignInButton = () => {
             href={link}
             LinkComponent={'a'}
         >
-            Sign In
+            Sign In with Google
         </Button>
     )
 }

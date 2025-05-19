@@ -9,7 +9,7 @@ import { useAddTodoMutation } from '@/app/lib/features/todo/todoApiSlice'
 
 const NewTodoForm = () => {
     const { id } = useAuth()
-    const [errMsg, setErrMsg] = useState("")
+    const [errMsg, setErrMsg] = useState<string | null>("")
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [addTodo] = useAddTodoMutation()
@@ -17,7 +17,8 @@ const NewTodoForm = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const formData = new FormData(e.currentTarget)
+
+        const formData = new FormData(e.currentTarget);
         const title = formData.get('title')?.toString().trim()
 
         if (!title) {
@@ -31,11 +32,18 @@ const NewTodoForm = () => {
         }
 
         try {
-            const response = await addTodo({ title, userId: id }).unwrap()
-            console.log(response)
-            if (inputRef.current) inputRef.current.value = ''
-        } catch (error) {
-            setErrMsg('An error occured.')
+            if (inputRef.current) inputRef.current.disabled = true
+
+            await addTodo({ title, userId: id }).unwrap()
+
+            if (inputRef.current) {
+                inputRef.current.value = ''
+                inputRef.current.disabled = false
+                inputRef.current.focus()
+            }
+        } catch (error: any) {
+            const message = error.status == 401 ? 'Please log in.' : error?.data?.message
+            setErrMsg(message)
             console.log(error)
         }
 

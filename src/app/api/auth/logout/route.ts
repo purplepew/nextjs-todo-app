@@ -4,7 +4,7 @@ export const POST = async (req: NextRequest) => {
     const cookies = req.cookies
 
     if (!cookies.get('refreshToken')) {
-        return NextResponse.json({ message: 'Cookie already cleared.' }, { status: 204 })
+        return NextResponse.json({ message: 'Cookie already cleared.' }, { status: 200 })
     }
 
     const response = NextResponse.json({ message: 'Logged out successfully.' })
@@ -15,6 +15,7 @@ export const POST = async (req: NextRequest) => {
         path: '/',
         maxAge: 0
     })
+    console.log('ii')
 
     return response
 }

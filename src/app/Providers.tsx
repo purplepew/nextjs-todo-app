@@ -15,15 +15,15 @@ const Providers = ({ children }: { children: ReactNode }) => {
       <StoreProvider>
         <ThemeProviderWrapper>
 
-          <Header />
 
-          <Container component={Paper} sx={{ minHeight: '100vh', padding: '1rem 0 1rem 0'}}>
-            <PersistLogin>
+          <PersistLogin>
+            <Header />
+            <Container component={Paper} sx={{ minHeight: '100vh', padding: '1rem 0 1rem 0' }}>
               {children}
-            </PersistLogin>
-          </Container>
+            </Container>
+            <Footer />
+          </PersistLogin>
 
-          <Footer />
 
         </ThemeProviderWrapper>
       </StoreProvider>
@@ -33,6 +33,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
 
 export default Providers;
 
-async function wait(n: number) {
+export async function wait(n: number) {
   return new Promise(res => setTimeout(res, n))
 }

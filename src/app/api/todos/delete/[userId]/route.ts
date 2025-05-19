@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { User, Todo } from '../../../../lib/models/models'
+import { wait } from "@/app/Providers";
 
 export async function POST(req: NextRequest, { params }: { params: { userId: string } }) {
     const { userId } = await params
@@ -21,8 +22,8 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
         await Todo.deleteOne({ _id: todoId }).exec()
 
         const result = await User.findByIdAndUpdate(
-            foundUser._id,
-            { $pull: { todos: userId } }
+            foundUser._id,  
+            { $pull: { todos: todoId } }
         )
 
         return NextResponse.json({ message: 'Todo deleted.', result })

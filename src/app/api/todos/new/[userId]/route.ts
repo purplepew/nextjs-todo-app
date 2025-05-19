@@ -23,7 +23,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
         foundUser.todos.push(newTodo._id as ObjectId)
         await foundUser.save()
 
-        return NextResponse.json({ message: 'New todo created.' })
+        return NextResponse.json({ message: 'New todo created.', todo: newTodo})
     } catch (error) {
         console.log('failed to create a new todo ', error)
         return NextResponse.json({ message: 'failed to create a new todo ' + error }, { status: 500 })

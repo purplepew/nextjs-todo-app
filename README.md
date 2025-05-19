@@ -1,3 +1,11 @@
+```
+FEATURES
+- authentication with google sign in
+- jwt for sessions
+- middleware that checks if jwt token is still valid
+- optimistic update on adding and deleting a todo
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

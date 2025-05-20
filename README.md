@@ -1,3 +1,11 @@
+```
+FEATURES
+- authentication with google sign in
+- jwt for sessions
+- middleware that checks if the client is authorized when fetching api request.
+- optimistic update on adding and deleting a todo
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

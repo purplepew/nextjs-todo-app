@@ -7,7 +7,7 @@ const SignInButton = () => {
 
     useEffect(() => {
         const getGoogleSignInLink = async () => {
-            await fetch('http://localhost:3000//api/auth/google/generateLink', { method: 'GET' })
+            await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/google/generateLink`, { method: 'GET' })
                 .then(response => response.json())
                 .then(result => {
                     setLink(result)

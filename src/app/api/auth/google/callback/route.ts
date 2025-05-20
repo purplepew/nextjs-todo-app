@@ -8,8 +8,8 @@ import { TokenPayload } from "google-auth-library";
 if (!process.env.JWT_REFRESH_TOKEN_SECRET ) {
     throw new Error('JWT_REFRESH_TOKEN_SECRET is not defined in the environment variables.');
 }
-if (!process.env.REDIRECT_URL) {
-    throw new Error('REDIRECT_URL is not defined in the environment variables.');
+if (!process.env.NEXT_PUBLIC_BASE_URL) {
+    throw new Error('NEXT_PUBLIC_BASE_URL is not defined in the environment variables.');
 }
 if (!process.env.GOOGLE_CLIENT_ID) {
     throw new Error('GOOGLE_CLIENT_ID is not defined in the environment variables.');
@@ -75,7 +75,7 @@ export const GET = async (req: NextRequest) => {
         { expiresIn: '10m' }
     )
 
-    const response = NextResponse.redirect(process.env.REDIRECT_URL!)
+    const response = NextResponse.redirect(process.env.NEXT_PUBLIC_BASE_URL!)
 
     response.cookies.set('refreshToken', refreshToken, {
         httpOnly: true,

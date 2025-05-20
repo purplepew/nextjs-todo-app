@@ -3,7 +3,7 @@ import { RootState } from '../store';
 import { setCredentials } from './auth/authSlice';
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'http://localhost:3000/',
+    baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token

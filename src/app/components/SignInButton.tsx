@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import GoogleIcon from '@mui/icons-material/Google'
 

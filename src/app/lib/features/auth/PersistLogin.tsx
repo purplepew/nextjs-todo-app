@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo} from "react"
+import { ReactNode, useEffect, useMemo} from "react"
 import { useAppSelector } from "../../hooks"
 import { useRefreshTokenMutation } from "./authApiSlice"
 import { selectCurrentToken } from "./authSlice"
@@ -23,7 +23,7 @@ const PersistLogin = ({ children }: { children: ReactNode }) => {
         }
 
         if (!token) verifyRefreshToken()
-    }, [token])
+    }, [token, refresh])
 
     const LoadingAnimation = useMemo(() => (
         <div style={{

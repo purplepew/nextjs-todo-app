@@ -68,7 +68,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
               } as { id: string; changes: Partial<ITodoDocument> });
             })
           );
-        } catch (err) {
+        } catch {
           patchResult.undo();
           dispatch(setError({ message: "Todo could not be added." }));
         }
@@ -76,7 +76,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
     }),
 
     deleteTodo: builder.mutation<
-      { message: string; result: any },
+      { message: string },
       { userId: string; todoId: string }
     >({
       query: ({ userId, todoId }) => ({

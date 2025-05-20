@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { User, Todo } from '../../../../lib/models/models'
 import { ObjectId } from "mongoose";
 
-export async function POST(req: NextRequest, { params }: { params: { userId: string } }) {
-    const { userId } = await params
+export async function POST(req: NextRequest) {
+    const url = req.nextUrl
+    const userId = url.pathname.split('/').pop()
     const { title } = await req.json()
 
     if (!userId || userId === 'null' || userId === 'undefined') {

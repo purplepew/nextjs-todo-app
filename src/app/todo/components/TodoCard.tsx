@@ -24,7 +24,7 @@ const TodoCard = ({ title, userId, todoId }: { title: string, userId: string, to
     return (
         <div>
             <Box component={Paper} elevation={4} sx={{ display: 'grid', gridTemplateColumns: '1fr .1fr', alignItems: 'center', padding: '0 .5rem' }}>
-                <Typography>{title}</Typography>
+                <Typography sx={{maxWidth: '23rem'}}>{title}</Typography>
                 <div style={{ display: 'flex' }}>
                     <IconButton onClick={handleDeleteTodo}>
                         <DeleteIcon />

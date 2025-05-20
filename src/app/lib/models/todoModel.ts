@@ -3,12 +3,12 @@ import mongoose, { Document, Model } from 'mongoose'
 export interface ITodo {
     title: string,
     completed?: boolean,
-    userId: mongoose.Schema.Types.ObjectId | string
+    userId: mongoose.Schema.Types.ObjectId | string,
 }
 
 export interface ITodoDocument extends ITodo, Document {
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
 }
 
 const todoSchema = new mongoose.Schema<ITodoDocument>({

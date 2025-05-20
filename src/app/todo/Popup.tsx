@@ -19,7 +19,7 @@ const Popup = ({ children }: { children: ReactNode }) => {
         return () => {
             clearInterval(time)
         }
-    }, [errMsg])
+    }, [errMsg, dispatch])
 
     return (
         <>

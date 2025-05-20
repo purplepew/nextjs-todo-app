@@ -5,17 +5,12 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import Button from '@mui/material/Button'
 import LogoutIcon from '@mui/icons-material/Logout'
 import SettingsIcon from '@mui/icons-material/Settings'
 import IconButton from '@mui/material/IconButton'
-import SignInButton from './SignInButton'
 import { useLogoutMutation } from '../lib/features/auth/authApiSlice'
 
-type Props = {}
-
-
-const ProfileAvatar = (props: Props) => {
+const ProfileAvatar = () => {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null)
     const open = Boolean(anchorEl)
 

@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { User } from '../../../../lib/models/models'
 import { connectToMongoDB } from '@/app/lib/db'
 
-export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
-    const { userId } = await params
+export async function GET(req: NextRequest) {
+    const url = req.nextUrl
+    const userId = url.pathname.split('/').pop()
 
 
     if (!userId || userId === 'null' || userId === 'undefined') {

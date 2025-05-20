@@ -9,7 +9,7 @@ import { useAddTodoMutation } from '@/app/lib/features/todo/todoApiSlice'
 
 const NewTodoForm = () => {
     const { id } = useAuth()
-    const [errMsg, setErrMsg] = useState<string | null>("")
+    const [errMsg, setErrMsg] = useState<string | undefined>("")
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [addTodo] = useAddTodoMutation()
@@ -32,19 +32,18 @@ const NewTodoForm = () => {
         }
 
         try {
-            if (inputRef.current) inputRef.current.disabled = true
 
             await addTodo({ title, userId: id }).unwrap()
 
             if (inputRef.current) {
                 inputRef.current.value = ''
-                inputRef.current.disabled = false
                 inputRef.current.focus()
             }
-        } catch (error: any) {
-            const message = error.status == 401 ? 'Please log in.' : error?.data?.message
+        } catch (error) {
+            const err = error as unknown as { status?: number, data?: { message: string } }
+            const message = err.status == 401 ? 'Please log in.' : err?.data?.message
             setErrMsg(message)
-            console.log(error)
+            console.log(err)
         }
 
     }

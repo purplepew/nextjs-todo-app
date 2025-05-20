@@ -7,15 +7,16 @@ const baseQuery = fetchBaseQuery({
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token
-
+        
         if (token) {
             headers.set('authorization', `Bearer ${token}`)
         }
-
+        
         return headers
     }
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const baseQueryWithReauth = async (args: string, api: any, extraOptions: any) => {
     let result = await baseQuery(args, api, extraOptions) as { data?: { message: string }, status?: number, error?: { status: number } }
     

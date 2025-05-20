@@ -40,7 +40,7 @@ export const GET = async (req: NextRequest) => {
             return NextResponse.json({ message: 'Ticket\'s payload is missing. ' }, { status: 500 })
         }
 
-    } catch (error) {
+    } catch {
         // console.error('Error during Google OAuth callback:', error);
         return NextResponse.json({ error: 'An error occurred during authentication.' }, { status: 500 });
     }
@@ -60,7 +60,7 @@ export const GET = async (req: NextRequest) => {
             console.log("New user created.")
         }
 
-    } catch (error) {
+    } catch {
        // console.log('Error during mongodb query:', error);
         return NextResponse.json({ error: 'An error occurred during mongodb query.' }, { status: 500 });
     }

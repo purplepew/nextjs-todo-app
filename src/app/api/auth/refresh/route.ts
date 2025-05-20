@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt, { TokenExpiredError } from 'jsonwebtoken'
-import User, { IUserInfo } from "@/app/lib/models/userModel";
+import User from "@/app/lib/models/userModel";
 
 if (!process.env.JWT_REFRESH_TOKEN_SECRET || !process.env.JWT_ACCESS_TOKEN_SECRET) {
     throw new Error('JWT_ACCESS_TOKEN_SECRET OR JWT_REFRESH_TOKEN_SECRET is not defined in the environment variables.');
@@ -41,7 +41,7 @@ export const GET = async (req: NextRequest) => {
 
     } catch (error) {
         if (error instanceof TokenExpiredError) {
-            return NextResponse.json({ message: 'Token has expired' }, { status: 401 })
+            return NextResponse.json({ message: 'Token has expired'}, { status: 401 })
         }
         return NextResponse.json({ message: 'Invalid token' }, { status: 401 })
     }

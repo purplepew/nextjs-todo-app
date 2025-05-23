@@ -11,8 +11,8 @@ import PersistLogin from './lib/features/auth/PersistLogin';
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <Prefetch>
-      <StoreProvider>
+    <StoreProvider>
+      <Prefetch>
         <ThemeProviderWrapper>
 
 
@@ -27,8 +27,8 @@ const Providers = ({ children }: { children: ReactNode }) => {
 
 
         </ThemeProviderWrapper>
-      </StoreProvider>
-    </Prefetch>
+      </Prefetch>
+    </StoreProvider>
   )
 }
 

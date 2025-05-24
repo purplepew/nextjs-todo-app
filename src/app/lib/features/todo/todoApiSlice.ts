@@ -113,7 +113,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
       },
     }),
     checkTodo: builder.mutation<{ message: string }, { todoId: string, userId: string }>({
-      query: ({ todoId, userId}) => ({
+      query: ({ todoId }) => ({
         url: `/api/todos/check`,
         method: 'POST',
         body: { todoId }

@@ -10,7 +10,7 @@ const Prefetch = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         dispatch(todoApiSlice.util.prefetch('getTodos', {userId: id!}, { force: true }))
-    }, [])
+    }, [dispatch, id])
 
     return (
         <>{children}</>

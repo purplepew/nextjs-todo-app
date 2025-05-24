@@ -5,7 +5,6 @@ export async function POST(req: NextRequest) {
     const url = req.nextUrl
     const userId = url.pathname.split('/').pop()
     const { todoId } = await req.json()
-    console.log(userId)
     if (
         !userId ||
         typeof userId !== 'string' ||

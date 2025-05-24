@@ -6,11 +6,14 @@ import Snackbar from '@mui/material/Snackbar'
 import AddIcon from '@mui/icons-material/Add'
 import useAuth from '@/app/components/hooks/useAuth'
 import { useAddTodoMutation } from '@/app/lib/features/todo/todoApiSlice'
+import { useDispatch } from 'react-redux'
+import { addTodoOffline } from '@/app/lib/features/todo/todoSlice'
 
 const NewTodoForm = () => {
     const { id } = useAuth()
     const [errMsg, setErrMsg] = useState<string | undefined>("")
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null)
+    const dispatch = useDispatch()
 
     const [addTodo] = useAddTodoMutation()
 
@@ -26,31 +29,33 @@ const NewTodoForm = () => {
             return
         }
 
-        if (!id) {
-            setErrMsg('An id is required.')
-            return
-        }
+        if (id) {
 
-        if (inputRef.current) {
-            inputRef.current.disabled = true
-        }
+            try {
+                if (inputRef.current) {
+                    inputRef.current.value = ''
+                    inputRef.current.disabled = true
+                }
 
-        try {
+                await addTodo({ title, userId: id }).unwrap()
 
-            await addTodo({ title, userId: id }).unwrap()
-
+                if (inputRef.current) {
+                    inputRef.current.disabled = false
+                    inputRef.current.focus()
+                }
+            } catch (error) {
+                const err = error as unknown as { status?: number, data?: { message: string } }
+                const message = err.status == 401 ? 'Please log in.' : err?.data?.message
+                setErrMsg(message)
+                console.log(err)
+            }
+        } else {
+            dispatch(addTodoOffline({ title, completed: false, id: crypto.randomUUID() }))
             if (inputRef.current) {
-                inputRef.current.disabled = false
                 inputRef.current.value = ''
                 inputRef.current.focus()
             }
-        } catch (error) {
-            const err = error as unknown as { status?: number, data?: { message: string } }
-            const message = err.status == 401 ? 'Please log in.' : err?.data?.message
-            setErrMsg(message)
-            console.log(err)
         }
-
     }
 
     return (

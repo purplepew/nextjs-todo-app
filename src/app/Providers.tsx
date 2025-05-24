@@ -7,25 +7,23 @@ import Paper from '@mui/material/Paper'
 import StoreProvider from './StoreProvider';
 import ThemeProviderWrapper from './ThemeProviderWrapper';
 import Prefetch from './lib/features/auth/Prefetch';
-import PersistLogin from './lib/features/auth/PersistLogin';
+import CheckAuth from './lib/features/auth/CheckAuth';
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <StoreProvider>
       <ThemeProviderWrapper>
 
-
-        <PersistLogin>
+        <CheckAuth>
           <Prefetch>
-            <p>Hello. We have updated to the version 1.1.1.1.1.1.1.7.1.3</p>
+            <p>Hello. We have updated to the version 1.1.1.1.1.1.1.7.1.4</p>
             <Header />
             <Container component={Paper} sx={{ minHeight: '100vh', padding: '1rem 0 1rem 0' }}>
               {children}
             </Container>
             <Footer />
           </Prefetch>
-        </PersistLogin>
-
+        </CheckAuth>
 
       </ThemeProviderWrapper>
     </StoreProvider>

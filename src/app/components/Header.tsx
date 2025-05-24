@@ -5,6 +5,7 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import ProfileAvatar from './ProfileAvatar'
+import SignInButton from './SignInButton'
 
 const Header = () => {
   const token = useAppSelector(selectCurrentToken)
@@ -14,6 +15,7 @@ const Header = () => {
       <Toolbar>
         <Typography component={'a'} href='/'>Header</Typography>
         <div style={{ marginLeft: 'auto' }}>
+          {!token && <SignInButton />}
           {token && <ProfileAvatar />}
         </div>
       </Toolbar>

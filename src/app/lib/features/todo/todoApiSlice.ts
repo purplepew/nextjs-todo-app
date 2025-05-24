@@ -108,7 +108,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           patchResult.undo();
-          dispatch(setError({ message: "Todo could not be deleted: " + error.error.data.message }));
+          dispatch(setError({ message: "Todo could not be deleted: " + error?.error?.data?.message }));
         }
       },
     }),
@@ -134,7 +134,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           patchResult.undo();
-          dispatch(setError({ message: "Todo could not be checked: " + error.error.data.message }));
+          dispatch(setError({ message: "Todo could not be checked: " + error?.error?.data?.message }));
         }
 
       }

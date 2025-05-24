@@ -9,7 +9,7 @@ const Prefetch = ({ children }: { children: ReactNode }) => {
     const { id } = useAuth()
 
     useEffect(() => {
-        dispatch(todoApiSlice.util.prefetch('getTodos', id!, { force: true }))
+        dispatch(todoApiSlice.util.prefetch('getTodos', {userId: id!}, { force: true }))
     }, [])
 
     return (

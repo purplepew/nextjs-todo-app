@@ -9,7 +9,7 @@ import { ITodoDocument } from '../lib/models/todoModel';
 const Page = () => {
     const { id } = useAuth()
 
-    const { data, isSuccess, isError, isLoading } = useGetTodosQuery(id!, { skip: !id })
+    const { data, isSuccess, isError, isLoading } = useGetTodosQuery({ userId: id! }, { skip: !id })
 
     let content: ReactNode | null
 
@@ -18,12 +18,12 @@ const Page = () => {
     } else if (isSuccess) {
         const renderTodoCard = data.ids.map(todoId => {
 
-            if(!id) return 
+            if (!id) return
 
             const todo = data.entities[todoId] as ITodoDocument
 
             return (
-                <TodoCard title={todo.title} key={todoId} todoId={todoId} userId={id} />
+                <TodoCard title={todo.title} key={todoId} todoId={todoId} userId={id} completed={todo.completed} />
             )
         })
 

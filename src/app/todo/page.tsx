@@ -15,7 +15,7 @@ const Page = () => {
     const { data, isSuccess, isError, isLoading } = useGetTodosQuery({ userId: id! }, { skip: !id })
     const offlineTodosIds = useSelector(selectIds)
     const offlineTodosEntities = useSelector(selectEntities)
-
+    
     let content: ReactNode | null
 
     if (!id) {

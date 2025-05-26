@@ -6,14 +6,14 @@ import { setError } from "../error/errorSlice";
 const todosAdapter = createEntityAdapter<ITodoDocument, string>({
   selectId: (todo) => (todo.id) as string,
   sortComparer: (a, b) => {
-  // Prioritize incomplete todos
-  if (a.completed !== b.completed) {
-    return a.completed ? 1 : -1;
-  }
+    // Prioritize incomplete todos
+    if (a.completed !== b.completed) {
+      return a.completed ? 1 : -1;
+    }
 
-  // If both are the same completion status, sort by updatedAt (newest first)
-  return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-}
+    // If both are the same completion status, sort by updatedAt (newest first)
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  }
 });
 const initialState = todosAdapter.getInitialState();
 
@@ -63,10 +63,10 @@ const todoApiSlice = apiSlice.injectEndpoints({
             } as unknown as ITodoDocument);
           })
         );
-
         try {
           const { data } = await queryFulfilled;
           console.log(data)
+
           dispatch(
             todoApiSlice.util.updateQueryData("getTodos", { userId } as { userId: string }, (draft) => {
               todosAdapter.updateOne(draft, {
@@ -74,9 +74,10 @@ const todoApiSlice = apiSlice.injectEndpoints({
                 changes: {
                   id: data.todo._id,
                 },
-              } as { id: string; changes: Partial<ITodoDocument> });
+              } as { id: string; changes: Partial<ITodoDocument> })
             })
           );
+
         } catch {
           patchResult.undo();
           dispatch(setError({ message: "Todo could not be added." }));
@@ -92,9 +93,6 @@ const todoApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { todoId },
       }),
-      invalidatesTags: (_, __, { todoId }) => [
-        { type: "Todos", id: todoId },
-      ],
       async onQueryStarted({ userId, todoId }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           todoApiSlice.util.updateQueryData("getTodos", { userId } as { userId: string }, (draft) => {
@@ -105,7 +103,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
 
         try {
           await queryFulfilled;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           patchResult.undo();
           dispatch(setError({ message: "Todo could not be deleted: " + error?.error?.data?.message }));
@@ -118,20 +116,24 @@ const todoApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: { todoId }
       }),
-      invalidatesTags: (_, __, { todoId }) => [
-        { type: "Todos", id: todoId },
-      ],
       onQueryStarted: async ({ todoId, userId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           todoApiSlice.util.updateQueryData('getTodos', { userId } as { userId: string }, (draft) => {
-             draft.entities[todoId].completed = !draft.entities[todoId].completed 
-          }
-          
-          ))
+            draft.entities[todoId].completed = !draft.entities[todoId].completed
+          }))
 
         try {
           await queryFulfilled
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          dispatch(todoApiSlice.util.updateQueryData('getTodos', { userId } as { userId: string }, (draft) => {
+            todosAdapter.updateOne(draft, {
+              id: todoId,
+              changes: {
+                updatedAt: new Date().toISOString()
+              }
+            } as { id: string; changes: Partial<ITodoDocument> })
+          }))
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           patchResult.undo();
           dispatch(setError({ message: "Todo could not be checked: " + error?.error?.data?.message }));

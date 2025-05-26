@@ -34,7 +34,7 @@ export const GET = async (req: NextRequest) => {
                 }
             },
             process.env.JWT_ACCESS_TOKEN_SECRET!,
-            { expiresIn: '1m' }
+            { expiresIn: '10m' }
         )
 
         return NextResponse.json({ accessToken })

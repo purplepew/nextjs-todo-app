@@ -34,13 +34,11 @@ const NewTodoForm = () => {
             try {
                 if (inputRef.current) {
                     inputRef.current.value = ''
-                    inputRef.current.disabled = true
                 }
 
                 await addTodo({ title, userId: id }).unwrap()
 
                 if (inputRef.current) {
-                    inputRef.current.disabled = false
                     inputRef.current.focus()
                 }
             } catch (error) {

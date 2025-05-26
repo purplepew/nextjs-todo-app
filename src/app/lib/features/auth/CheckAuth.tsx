@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 
 const CheckAuth = ({ children }: { children: ReactNode }) => {
     const token = useAppSelector(selectCurrentToken)
-    const [refresh, { isLoading }] = useRefreshTokenMutation()
+    const [refresh, { isLoading, isUninitialized }] = useRefreshTokenMutation()
 
     useEffect(() => {
         const verifyRefreshToken = async () => {
@@ -34,7 +34,7 @@ const CheckAuth = ({ children }: { children: ReactNode }) => {
     ), []
     )
 
-    if (isLoading) {
+    if (isLoading || isUninitialized) {
         return LoadingAnimation
     } else {
         return <>{children}</>

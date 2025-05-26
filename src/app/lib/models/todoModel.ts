@@ -7,8 +7,8 @@ export interface ITodo {
 }
 
 export interface ITodoDocument extends ITodo, Document {
-    createdAt: Date,
-    updatedAt: Date,
+    createdAt: string,
+    updatedAt: string,
 }
 
 const todoSchema = new mongoose.Schema<ITodoDocument>({

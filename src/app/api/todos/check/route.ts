@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { Todo } from "@/app/lib/models/models";
+import { connectToMongoDB } from "@/app/lib/db";
 
 export async function POST(req: NextRequest) {
     const { todoId } = await req.json()
@@ -10,6 +11,8 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+        await connectToMongoDB()
+
         const todo = await Todo.findById(todoId).exec()
 
         if (!todo) {

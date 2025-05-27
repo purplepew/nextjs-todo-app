@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { User, Todo } from '../../../../lib/models/models'
 import { ObjectId } from "mongoose";
+import { connectToMongoDB } from "@/app/lib/db";
 
 export async function POST(req: NextRequest) {
     const url = req.nextUrl
@@ -14,6 +15,9 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+
+        await connectToMongoDB()
+        
         const foundUser = await User.findById(userId).exec()
         
         if (!foundUser) {
@@ -21,7 +25,9 @@ export async function POST(req: NextRequest) {
         }
 
         const newTodo = await Todo.create({ title, completed: false, userId})
+
         foundUser.todos.push(newTodo._id as ObjectId)
+
         await foundUser.save()
 
         return NextResponse.json({ message: 'New todo created.', todo: newTodo})

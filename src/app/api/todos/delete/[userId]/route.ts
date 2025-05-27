@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { User, Todo } from '../../../../lib/models/models'
+import { connectToMongoDB } from "@/app/lib/db";
 
 export async function POST(req: NextRequest) {
     const url = req.nextUrl
@@ -18,6 +19,9 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+
+        await connectToMongoDB()
+        
         const foundUser = await User.findById(userId).lean().exec()
 
         if (!foundUser) {

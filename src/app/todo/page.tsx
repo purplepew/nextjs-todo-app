@@ -33,10 +33,10 @@ const Page = () => {
         const renderTodoCard = data.ids.map((todoId: string) => {
             if (!id) return
 
-            const todo = data.entities[todoId] as ITodoDocument
+            const todo = data.entities[todoId] as ITodoDocument & { isTemp: boolean }
 
             return (
-                <TodoCard title={todo.title} key={todoId} todoId={todoId} userId={id} completed={todo.completed} />
+                <TodoCard title={todo.title} key={todoId} todoId={todoId} userId={id} completed={todo.completed} isTemp={todo.isTemp} />
             )
         })
 
@@ -50,7 +50,7 @@ const Page = () => {
             <NewTodoForm />
             <div
                 style={{
-                    margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr', width: '500px', gap: 5, marginTop: '1rem'
+                    margin: '0 auto', maxWidth: '500px', gap: 5, marginTop: '1rem', display: 'flex', flexDirection: 'column'
                 }}
             >
                 {content}

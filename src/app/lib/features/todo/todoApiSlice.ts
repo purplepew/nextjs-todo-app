@@ -56,6 +56,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
               completed: false,
               updatedAt: timestamp,
               createdAt: timestamp,
+              isTemp: true
             } as unknown as ITodoDocument);
           })
         );
@@ -69,6 +70,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
                 id: tempId,
                 changes: {
                   id: data.todo._id,
+                  isTemp: false
                 },
               } as { id: string; changes: Partial<ITodoDocument> })
             })
@@ -117,16 +119,14 @@ const todoApiSlice = apiSlice.injectEndpoints({
             todosAdapter.updateOne(draft, {
               id: todoId,
               changes: {
-                updatedAt: new Date().toISOString(),
-                completed: !draft.entities[todoId].completed
+                completed: !draft.entities[todoId].completed,
+                updatedAt: new Date().toISOString()
               }
             } as { id: string; changes: Partial<ITodoDocument> })
           }))
 
         try {
           await queryFulfilled
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           patchResult.undo();

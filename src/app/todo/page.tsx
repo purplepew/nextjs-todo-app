@@ -12,10 +12,12 @@ import { selectIds, selectEntities } from '../lib/features/todo/todoSlice';
 const Page = () => {
     const { id } = useAuth()
 
-    const { data, isSuccess, isError, isLoading } = useGetTodosQuery({ userId: id! }, { skip: !id })
+    const { data, isSuccess, isError, isLoading } = useGetTodosQuery({ userId: id! }, {
+        selectFromResult: ({ data, isSuccess, isError, isLoading }) => ({ data, isSuccess, isError, isLoading })
+    })
     const offlineTodosIds = useSelector(selectIds)
     const offlineTodosEntities = useSelector(selectEntities)
-    
+
     let content: ReactNode | null
 
     if (!id) {
@@ -27,8 +29,8 @@ const Page = () => {
         content = renderTodoCard
     } else if (isLoading) {
         content = (<p>Loading...</p>)
-    } else if (isSuccess) {
-        const renderTodoCard = data.ids.map(todoId => {
+    } else if (isSuccess && data) {
+        const renderTodoCard = data.ids.map((todoId: string) => {
             if (!id) return
 
             const todo = data.entities[todoId] as ITodoDocument

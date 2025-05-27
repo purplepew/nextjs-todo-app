@@ -30,7 +30,7 @@ const todoApiSlice = apiSlice.injectEndpoints({
           ...todo,
           id: todo._id
         }));
-        return todosAdapter.setAll(initialState, todos as ITodoDocument[]);
+        return todosAdapter.upsertMany(initialState, todos as ITodoDocument[]);
       },
       providesTags: (result) =>
         result?.ids

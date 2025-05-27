@@ -16,7 +16,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
 
         <CheckAuth>
           <Prefetch>
-            <p>Hello. We have updated to the version 1.1.1.1.1.1.1.7.1.4</p>
+            <p>Hello. We have updated to the version 1.1.1.1.1.1.1.7.6</p>
             <Header />
             <Container component={Paper} sx={{ minHeight: '100vh', padding: '1rem 0 1rem 0' }}>
               {children}

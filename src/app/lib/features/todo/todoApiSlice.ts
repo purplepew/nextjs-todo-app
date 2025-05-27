@@ -17,21 +17,18 @@ const todosAdapter = createEntityAdapter<ITodoDocument, string>({
 });
 const initialState = todosAdapter.getInitialState();
 
+const normalizedId = (todo: ITodoDocument) => ({ ...todo, id: todo._id })
+
 const todoApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getTodos: builder.query<EntityState<ITodoDocument, string>, { userId: string }>({
-      query: ({ userId }) => ({
-        url: `/api/users/todos/${userId}`,
-        method: "GET",
-      }),
-      transformResponse: (responseData: ITodoDocument[]) => {
-        const todos = responseData.map((todo) => ({
-          ...todo,
-          id: todo._id
-        }));
+      query: ({ userId }) => `/api/users/todos/${userId}`,
+      transformResponse: async (responseData: ITodoDocument[]) => {
+        const todos = await Promise.all(responseData.map(normalizedId))
         return todosAdapter.upsertMany(initialState, todos as ITodoDocument[]);
       },
+      keepUnusedDataFor: 60, // seconds
       providesTags: (result) =>
         result?.ids
           ? [
@@ -40,7 +37,6 @@ const todoApiSlice = apiSlice.injectEndpoints({
           ]
           : [{ type: "Todos", id: "LIST" }],
     }),
-
     addTodo: builder.mutation<{ message: string; todo: ITodoDocument }, ITodo>({
       query: ({ title, userId }) => ({
         url: `/api/todos/new/${userId}`,
@@ -117,22 +113,20 @@ const todoApiSlice = apiSlice.injectEndpoints({
         body: { todoId }
       }),
       onQueryStarted: async ({ todoId, userId }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          todoApiSlice.util.updateQueryData('getTodos', { userId } as { userId: string }, (draft) => {
-            draft.entities[todoId].completed = !draft.entities[todoId].completed
+        const patchResult = dispatch(todoApiSlice.util.updateQueryData('getTodos', { userId } as { userId: string }, (draft) => {
+            todosAdapter.updateOne(draft, {
+              id: todoId,
+              changes: {
+                updatedAt: new Date().toISOString(),
+                completed: !draft.entities[todoId].completed
+              }
+            } as { id: string; changes: Partial<ITodoDocument> })
           }))
 
         try {
           await queryFulfilled
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          dispatch(todoApiSlice.util.updateQueryData('getTodos', { userId } as { userId: string }, (draft) => {
-            todosAdapter.updateOne(draft, {
-              id: todoId,
-              changes: {
-                updatedAt: new Date().toISOString()
-              }
-            } as { id: string; changes: Partial<ITodoDocument> })
-          }))
+          
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           patchResult.undo();

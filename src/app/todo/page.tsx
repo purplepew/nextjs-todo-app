@@ -2,27 +2,39 @@
 import useAuth from '../components/hooks/useAuth'
 import NewTodoForm from './components/NewTodoForm'
 import { useGetTodosQuery } from '../lib/features/todo/todoApiSlice'
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import TodoCard from './components/TodoCard';
 import { ITodoDocument } from '../lib/models/todoModel';
-import { useSelector } from 'react-redux';
-import { ITodoOffline } from '../lib/features/todo/todoSlice';
-import { selectIds, selectEntities } from '../lib/features/todo/todoSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { ITodoOffline, selectAll, initializeTodo } from '../lib/features/todo/todoSlice';
 
 const Page = () => {
+    const dispatch = useDispatch()
     const { id } = useAuth()
 
     const { data, isSuccess, isError, isLoading } = useGetTodosQuery({ userId: id! }, {
         selectFromResult: ({ data, isSuccess, isError, isLoading }) => ({ data, isSuccess, isError, isLoading })
     })
-    const offlineTodosIds = useSelector(selectIds)
-    const offlineTodosEntities = useSelector(selectEntities)
+
+    const offlineTodos = useSelector(selectAll)
+
+    useEffect(() => {
+        if (!id) {
+            const todosRaw = localStorage.getItem('todos')
+            const localStorageTodos: ITodoOffline[] = todosRaw ? JSON.parse(todosRaw) : [];
+            dispatch(initializeTodo({ todos: localStorageTodos }))
+        }
+    }, [id, dispatch])
 
     let content: ReactNode | null
 
-    if (!id) {
-        const renderTodoCard = offlineTodosIds.map(todoId => {
-            const todo = offlineTodosEntities[todoId] as ITodoOffline
+    if (!id) { //Offline mode
+
+        if(offlineTodos.length){
+            localStorage.setItem('todos', JSON.stringify(offlineTodos))
+        }
+
+        const renderTodoCard = offlineTodos.map((todo: ITodoOffline) => {
             return (
                 <TodoCard title={todo.title} completed={todo.completed} todoId={todo.id} key={todo.id} />)
         })

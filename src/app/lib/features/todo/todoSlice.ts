@@ -22,7 +22,6 @@ const todosAdapter = createEntityAdapter<ITodoOffline, string>({
 
 const initialState = todosAdapter.getInitialState()
 
-
 const todoSlice = createSlice({
     name: 'todo',
     initialState,
@@ -37,12 +36,16 @@ const todoSlice = createSlice({
         checkTodoOffline: (state, action: { payload: { id: string, completed: boolean } }) => {
             const { id, completed } = action.payload
             todosAdapter.updateOne(state, { id, changes: { completed: !completed, updatedAt: new Date().toISOString() } })
+        },
+        initializeTodo: (state, action: { payload: { todos: ITodoOffline[] } }) => {
+            const { todos } = action.payload
+            todosAdapter.setAll(state, todos)
         }
     }
 })
 
 export default todoSlice.reducer
 
-export const { addTodoOffline, checkTodoOffline, removeTodoOffline } = todoSlice.actions
+export const { addTodoOffline, checkTodoOffline, removeTodoOffline, initializeTodo } = todoSlice.actions
 
-export const { selectIds, selectEntities } = todosAdapter.getSelectors((state: RootState) => state.todo ?? initialState)
+export const { selectIds, selectEntities, selectAll } = todosAdapter.getSelectors((state: RootState) => state.todo ?? initialState)

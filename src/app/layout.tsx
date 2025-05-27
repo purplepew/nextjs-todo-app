@@ -8,8 +8,6 @@ export const metadata: Metadata = {
   keywords: ["to-do app", "task manager", "productivity tool", "task tracker", "organizer"],
   authors: [{ name: "Todo", url: "https://nextjs-todo-app-drab.vercel.app/" }],
   creator: "Todo",
-  themeColor: "black",
-  viewport: "width=device-width, initial-scale=1.0",
   openGraph: {
     title: "Smart and Simple To-Do App",
     description: "Manage your tasks effectively with our intuitive and fast to-do app.",

@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt, { TokenExpiredError } from 'jsonwebtoken'
 import User from "@/app/lib/models/userModel";
+import { connectToMongoDB } from "@/app/lib/db";
 
 if (!process.env.JWT_REFRESH_TOKEN_SECRET || !process.env.JWT_ACCESS_TOKEN_SECRET) {
     throw new Error('JWT_ACCESS_TOKEN_SECRET OR JWT_REFRESH_TOKEN_SECRET is not defined in the environment variables.');
@@ -16,8 +17,11 @@ export const GET = async (req: NextRequest) => {
     const refreshToken = cookies.get('refreshToken')?.value
 
     try {
+        
         const decoded = jwt.verify(refreshToken!, process.env.JWT_REFRESH_TOKEN_SECRET!) as { UserInfo: {id: string} }
-
+        
+        await connectToMongoDB()
+        
         const foundUser = await User.findById(decoded.UserInfo.id).lean().exec()
 
         if (!foundUser) {

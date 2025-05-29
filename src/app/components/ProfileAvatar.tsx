@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Menu from '@mui/material/Menu'
 import List from '@mui/material/List'
@@ -6,52 +6,55 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import LogoutIcon from '@mui/icons-material/Logout'
-import SettingsIcon from '@mui/icons-material/Settings'
 import IconButton from '@mui/material/IconButton'
 import { useLogoutMutation } from '../lib/features/auth/authApiSlice'
+import ProfileSettingsModal from './ProfileSettingsModal'
 
-const ProfileAvatar = () => {
+type Props = {
+    picture: string,
+    name: string
+}
+
+const ProfileAvatar = ({ picture, name }: Props) => {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null)
     const open = Boolean(anchorEl)
 
     const [logout] = useLogoutMutation()
 
-    const handleLogout = async () => {
+    const handleLogout = useCallback(async () => {
 
         try {
             await logout().unwrap()
         } catch (error) {
             console.log(error)
         }
-    }
+    }, [logout])
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setAnchorEl(null)
-    }
+    }, [])
 
-    const handleOpen = (e: React.MouseEvent<HTMLElement>) => {
+    const handleOpen = useCallback((e: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(e.currentTarget)
-    }
+    }, [])
 
     return (
         <>
             <IconButton onClick={handleOpen}>
-                <Avatar src='' />
+                <Avatar src={`${picture}`} alt={name} />
             </IconButton>
             <Menu open={open} anchorEl={anchorEl} onClose={handleClose}>
                 <List dense>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <SettingsIcon />
-                        </ListItemIcon>
-                        <ListItemText sx={{whiteSpace: 'nowrap'}}>Profile Settings</ListItemText>
-                    </ListItemButton>
+                    
+                    <ProfileSettingsModal />
+
                     <ListItemButton onClick={handleLogout}>
                         <ListItemIcon>
                             <LogoutIcon color='error' />
                         </ListItemIcon>
                         <ListItemText>Log out</ListItemText>
                     </ListItemButton>
+                    
                 </List>
             </Menu>
         </>

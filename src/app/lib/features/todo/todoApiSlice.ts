@@ -62,7 +62,6 @@ const todoApiSlice = apiSlice.injectEndpoints({
         );
         try {
           const { data } = await queryFulfilled;
-          console.log(data)
 
           dispatch(
             todoApiSlice.util.updateQueryData("getTodos", { userId } as { userId: string }, (draft) => {

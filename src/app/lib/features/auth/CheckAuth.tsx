@@ -13,6 +13,7 @@ const CheckAuth = ({ children }: { children: ReactNode }) => {
                 await refresh()
             } catch (error) {
                 console.log(error)
+                localStorage.setItem('isLoggedIn', 'false')
             }
         }
 
@@ -31,7 +32,7 @@ const CheckAuth = ({ children }: { children: ReactNode }) => {
     //     </div>
     // ), []
     // )
-    
+
     return <>{children}</>
 }
 

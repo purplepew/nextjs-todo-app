@@ -14,6 +14,7 @@ const authApiSlice = apiSlice.injectEndpoints({
                     const { data } = await queryFulfilled
                     const { accessToken } = data
                     dispatch(setCredentials({ accessToken }))
+                    localStorage.setItem('isLoggedIn', 'true')
                 } catch (err) {
                     console.log(err)
                 }
@@ -29,6 +30,7 @@ const authApiSlice = apiSlice.injectEndpoints({
                     await queryFulfilled
                     dispatch(logout())
                     dispatch(apiSlice.util.resetApiState())
+                    localStorage.setItem('isLoggedIn', 'false')
                     location.reload()
                 } catch (err) {
                     console.log(err)

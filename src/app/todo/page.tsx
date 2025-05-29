@@ -4,7 +4,7 @@ import NewTodoForm from './components/NewTodoForm'
 import Typography from '@mui/material/Typography'
 import Skeleton from '@mui/material/Skeleton'
 import { useGetTodosQuery } from '../lib/features/todo/todoApiSlice'
-import { ReactNode, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import TodoCard from './components/TodoCard';
 import { ITodoDocument } from '../lib/models/todoModel';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,24 +15,40 @@ const Page = () => {
     const { id: userId } = useAuth()
     const hasLoadedLocalTodoRef = useRef(false)
 
+    console.log('RERENDER')
+
     const { data, isSuccess, isError, isLoading } = useGetTodosQuery({ userId: userId! }, {
         selectFromResult: ({ data, isSuccess, isError, isLoading }) => ({ data, isSuccess, isError, isLoading }),
         skip: !userId
     })
 
+    const isLoggedIn = useMemo(() => {
+        if (typeof window !== 'undefined') {
+            return JSON.parse(localStorage.getItem('isLoggedIn') || 'false');
+        }
+        return false;
+    }, []);
+
     useEffect(() => {
-        if (!userId) {
-            const localStorageTodos: ITodoOffline[] = JSON.parse(localStorage.getItem('todos') as string) ?? [];
-            hasLoadedLocalTodoRef.current = true
-            if (localStorageTodos.length > 0) {
-                dispatch(initializeTodo({ todos: localStorageTodos }))
+        if (!userId && typeof window !== 'undefined' && !hasLoadedLocalTodoRef.current) {
+            const storedTodos: ITodoOffline[] = JSON.parse(localStorage.getItem('todos') || '[]');
+            hasLoadedLocalTodoRef.current = true;
+
+            if (storedTodos.length > 0) {
+                dispatch(initializeTodo({ todos: storedTodos }));
             }
         }
-    }, [userId, dispatch])
+    }, [userId, dispatch]);
 
     const offlineTodos = useSelector(selectAll)
 
-    const SkeletonTodoCards = useMemo(() => {
+    useEffect(() => {
+        if (!userId && hasLoadedLocalTodoRef.current && typeof window !== 'undefined') {
+            localStorage.setItem('todos', JSON.stringify(offlineTodos));
+        }
+    }, [offlineTodos, userId]);
+
+    const skeletons = useMemo(() => {
         return Array.from({ length: 3 }, (_, i) => i).map(i => {
             return (
                 <Skeleton key={i} variant='rectangular' sx={{ borderRadius: 1, height: '2rem', minWidth: '20.5rem' }} />
@@ -40,49 +56,43 @@ const Page = () => {
         })
     }, [])
 
-    let renderTodoCards: ReactNode = SkeletonTodoCards
-
-    if (!userId) {
-        //Offline mode
-        if (hasLoadedLocalTodoRef.current) { // Save todos 
-            localStorage.setItem('todos', JSON.stringify(offlineTodos))
+    const renderTodoCards = useMemo(() => {
+        if (!userId && !isLoggedIn) {
+            if (offlineTodos.length > 0) {
+                return offlineTodos.map((todo) => (
+                    <TodoCard key={todo.id} title={todo.title} completed={todo.completed} todoId={todo.id} />
+                ));
+            }
+            return hasLoadedLocalTodoRef.current ? <Typography>Empty.</Typography> : skeletons;
         }
 
-        if (offlineTodos.length > 0) {
-            renderTodoCards = offlineTodos.map((todo: ITodoOffline) => {
+        if (isLoading) return skeletons;
+        if (isError) return <Typography color="error">Error occurred</Typography>;
+
+        if (isSuccess && data && userId) {
+            return data.ids.map((todoId: string) => {
+                const todo = data.entities[todoId] as ITodoDocument & { isTemp: boolean };
                 return (
-                    <TodoCard title={todo.title} completed={todo.completed} todoId={todo.id} key={todo.id} />)
-            })
-        } else if (hasLoadedLocalTodoRef.current && offlineTodos.length < 1) {
-            renderTodoCards = (<Typography>Empty.</Typography>)
+                    <TodoCard
+                        key={todoId}
+                        todoId={todoId}
+                        title={todo.title}
+                        completed={todo.completed}
+                        userId={userId}
+                        isTemp={todo.isTemp}
+                    />
+                );
+            });
         }
 
-    } else if (isLoading) {
-        renderTodoCards = SkeletonTodoCards
-    } else if (isSuccess && data) {
-        renderTodoCards = data.ids.map((todoId: string) => {
+        return skeletons;
+    }, [userId, isLoggedIn, offlineTodos, isLoading, isError, isSuccess, data, skeletons]);
 
-            const todo = data.entities[todoId] as ITodoDocument & { isTemp: boolean }
-
-            return (
-                <TodoCard
-                    title={todo.title}
-                    key={todoId}
-                    todoId={todoId}
-                    userId={userId}
-                    completed={todo.completed}
-                    isTemp={todo.isTemp}
-                />
-            )
-        })
-    } else if (isError) {
-        renderTodoCards = (<p>Error occured</p>)
-    }
 
     return (
         <div>
-            {!userId && hasLoadedLocalTodoRef.current && <Typography color='primary' mb={1}>Offline Mode</Typography>}
-            
+            {(!userId && hasLoadedLocalTodoRef.current && !isLoggedIn) && <Typography color='primary' mb={1}>Offline Mode</Typography>}
+
             <NewTodoForm />
 
             <div

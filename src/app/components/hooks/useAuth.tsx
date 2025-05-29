@@ -5,8 +5,8 @@ import { jwtDecode } from 'jwt-decode'
 import { IUserInfo } from '@/app/lib/models/userModel'
 
 const useAuth = () => {
-    
-    const token = useAppSelector(selectCurrentToken) 
+
+    const token = useAppSelector(selectCurrentToken)
 
     if (token) {
         const decoded = jwtDecode(token) as IUserInfo

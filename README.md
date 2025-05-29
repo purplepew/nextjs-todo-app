@@ -1,10 +1,11 @@
-```
-FEATURES
-- authentication with google sign in
-- jwt for sessions
-- middleware that checks if the client is authorized when fetching api request.
-- optimistic update on adding and deleting a todo
-```
+
+Features:
+
+- Authentication: Google Sign-In integration with JWT-based session handling
+- Middleware: Validates JWT on every API request for secure access
+- Database: MongoDB for storing user and application data
+- Optimistic UI: Instant UI updates for a smoother user experience before server confirmation
+
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

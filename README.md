@@ -1,10 +1,10 @@
 
 Features:
 
--Authentication: Google Sign-In integration with JWT-based session handling
--Middleware: Validates JWT on every API request for secure access
--Database: MongoDB for storing user and application data
--Optimistic UI: Instant UI updates for a smoother user experience before server confirmation
+- Authentication: Google Sign-In integration with JWT-based session handling
+- Middleware: Validates JWT on every API request for secure access
+- Database: MongoDB for storing user and application data
+- Optimistic UI: Instant UI updates for a smoother user experience before server confirmation
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).

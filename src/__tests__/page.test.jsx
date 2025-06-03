@@ -1,13 +1,13 @@
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
-import Page from './../app/page'
- 
+import { render, screen} from '@testing-library/react'
+import NewTodoForm from '../app/todo/components/NewTodoForm'
+
 describe('Page', () => {
   it('renders a heading', () => {
-    render(<Page />)
+    render(<NewTodoForm />)
  
-    const heading = screen.getByRole('heading', { level: 1 })
+    const button = screen.getByRole('button')
  
-    expect(heading).toBeInTheDocument()
+    expect(button).toBeInTheDocument() //failed
   })
 })

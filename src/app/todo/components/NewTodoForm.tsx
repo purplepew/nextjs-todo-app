@@ -57,9 +57,19 @@ const NewTodoForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit} style={{ margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr .1fr', minWidth: '20.5rem', maxWidth: '500px', gap: 2 }}>
+        <form onSubmit={handleSubmit}
+            style={{
+                margin: '0 auto',
+                display: 'grid',
+                gridTemplateColumns: '1fr .1fr',
+                minWidth: '20.5rem',
+                maxWidth: '500px',
+                gap: 2,
+            }}>
             <TextField label='Add a todo' name='title' inputRef={inputRef} />
-            <Button startIcon={<AddIcon />} variant='contained' size='small' color='success' type='submit'>Add</Button>
+            <Button type='submit'>
+                <AddIcon />
+            </Button>
             <Snackbar autoHideDuration={5000} message={errMsg} open={Boolean(errMsg)} onClose={() => setErrMsg('')} />
         </form>
     )

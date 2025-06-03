@@ -8,7 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import LogoutIcon from '@mui/icons-material/Logout'
 import IconButton from '@mui/material/IconButton'
 import { useLogoutMutation } from '../lib/features/auth/authApiSlice'
-import ProfileSettingsModal from './ProfileSettingsModal'
+import SettingsModal from './SettingsModal'
 
 type Props = {
     picture: string,
@@ -46,7 +46,7 @@ const ProfileAvatar = ({ picture, name }: Props) => {
             <Menu open={open} anchorEl={anchorEl} onClose={handleClose}>
                 <List dense>
                     
-                    <ProfileSettingsModal />
+                    <SettingsModal />
 
                     <ListItemButton onClick={handleLogout}>
                         <ListItemIcon>

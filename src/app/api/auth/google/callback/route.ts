@@ -46,11 +46,14 @@ export const GET = async (req: NextRequest) => {
     }
 
     try {
+        console.log('1')
         await connectToMongoDB()
-
+        console.log('connected to mongodb')
         user = await User.findOne({ email: payload?.email }).exec()
-
+        console.log('The user is located or not located')
+        
         if (!user) {
+            console.log('Creating an account for the google account')
             user = await User.create({
                 email: payload.email,
                 name: payload.name,
@@ -59,6 +62,7 @@ export const GET = async (req: NextRequest) => {
             })
             console.log("New user created.")
         }
+        
 
     } catch {
        // console.log('Error during mongodb query:', error);

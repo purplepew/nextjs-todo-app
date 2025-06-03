@@ -47,7 +47,7 @@ function TodoCard(
         return !completed
             ? (
                 <IconButton onClick={handleCheckTodo} disabled={isTemp}>
-                    <CheckIcon color='success' />
+                    <CheckIcon color='primary' />
                 </IconButton>
             )
             : (
@@ -75,6 +75,7 @@ function TodoCard(
                         minWidth: '15rem',
                         textDecoration: completed ? 'line-through' : 'none',
                         color: !completed ? 'rgba(225,225,225, 1)' : 'rgba(225,225,225, .2)',
+                        overflowX: 'hidden'
                     }}
                 >
                     {title}

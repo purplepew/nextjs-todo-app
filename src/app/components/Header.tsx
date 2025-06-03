@@ -14,10 +14,11 @@ const Header = () => {
   return (
     <AppBar position='static'>
       <Toolbar>
-        <Typography component={'a'} href='/'>Header</Typography>
+        <Typography component={'a'} href='/'>Todo</Typography>
         <div style={{ marginLeft: 'auto' }}>
           {!token && <SignInButton />}
-          {token && <ProfileAvatar name={ name ?? '' } picture={picture ?? ''} />}
+          {!token && picture && name && <ProfileAvatar name={ name ?? '' } picture={picture ?? ''} />}
+          
         </div>
       </Toolbar>
     </AppBar>

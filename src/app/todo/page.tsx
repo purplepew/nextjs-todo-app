@@ -15,8 +15,6 @@ const Page = () => {
     const { id: userId } = useAuth()
     const hasLoadedLocalTodoRef = useRef(false)
 
-    console.log('RERENDER')
-
     const { data, isSuccess, isError, isLoading } = useGetTodosQuery({ userId: userId! }, {
         selectFromResult: ({ data, isSuccess, isError, isLoading }) => ({ data, isSuccess, isError, isLoading }),
         skip: !userId

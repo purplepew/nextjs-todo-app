@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
@@ -16,7 +16,6 @@ const ProfileSettingsModal = () => {
   const [value, setValue] = useState(0)
 
   const handleOpen = useCallback(() => setOpen(true), [])
-  const handleClose = useCallback(() => setOpen(false), [])
 
   const handleOnChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)

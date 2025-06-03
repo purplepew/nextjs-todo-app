@@ -17,7 +17,7 @@ const Header = () => {
         <Typography component={'a'} href='/'>Todo</Typography>
         <div style={{ marginLeft: 'auto' }}>
           {!token && <SignInButton />}
-          {!token && picture && name && <ProfileAvatar name={ name ?? '' } picture={picture ?? ''} />}
+          {token && picture && name && <ProfileAvatar name={ name } picture={picture} />}
           
         </div>
       </Toolbar>

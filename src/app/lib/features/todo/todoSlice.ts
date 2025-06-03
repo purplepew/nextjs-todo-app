@@ -48,4 +48,4 @@ export default todoSlice.reducer
 
 export const { addTodoOffline, checkTodoOffline, removeTodoOffline, initializeTodo } = todoSlice.actions
 
-export const { selectIds, selectEntities, selectAll } = todosAdapter.getSelectors((state: RootState) => state.todo ?? initialState)
+export const { selectAll: selectAllOfflineTodos } = todosAdapter.getSelectors((state: RootState) => state.todo ?? initialState)

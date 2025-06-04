@@ -76,7 +76,7 @@ export const GET = async (req: NextRequest) => {
             }
         },
         process.env.JWT_REFRESH_TOKEN_SECRET!,
-        { expiresIn: '500m' }
+        { expiresIn: '7d' }
     )
 
     const response = NextResponse.redirect(process.env.NEXT_PUBLIC_BASE_URL!)

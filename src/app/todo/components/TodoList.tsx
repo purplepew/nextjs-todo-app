@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import TodoCard from './TodoCard'
 import Skeleton from '@mui/material/Skeleton'
 import { RootState } from "@/app/lib/store";
+import { ITodoDocument } from "@/app/lib/models/todoModel";
 
 
 export default function TodoList() {
@@ -43,8 +44,8 @@ export default function TodoList() {
     }, [offlineTodos])
 
     const renderTodos = userId && data?.ids.map(todoId => {
-        const todo = data.entities[todoId]
-        return <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} userId={userId} />
+        const todo = data.entities[todoId] as ITodoDocument & { isTemp: boolean }
+        return <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} userId={userId} isTemp={todo.isTemp} />
     })
 
     const skeletons = useMemo(() => {

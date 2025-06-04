@@ -66,11 +66,11 @@ const NewTodoForm = () => {
                 maxWidth: '500px',
                 gap: 2,
             }}>
-            <TextField label='Add a todo' name='title' inputRef={inputRef} />
-            <Button type='submit'>
+            <TextField label='Add a todo' name='title' inputRef={inputRef} aria-label='Input todo'/>
+            <Button type='submit' aria-label='Add todo'>
                 <AddIcon />
             </Button>
-            <Snackbar autoHideDuration={5000} message={errMsg} open={Boolean(errMsg)} onClose={() => setErrMsg('')} />
+            <Snackbar aria-label='error popup' autoHideDuration={5000} message={errMsg} open={Boolean(errMsg)} onClose={() => setErrMsg('')} />
         </form>
     )
 }

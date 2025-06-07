@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TodoCard from './TodoCard'
 import Skeleton from '@mui/material/Skeleton'
+import Typography from '@mui/material/Typography'
 import { RootState } from "@/app/lib/store";
 import { ITodoDocument } from "@/app/lib/models/todoModel";
 
@@ -39,13 +40,13 @@ export default function TodoList() {
 
     const renderOfflineTodos = useMemo(() => {
         return offlineTodos?.map(todo => (
-            <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} />
+            <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} createdAt={todo.createdAt} />
         ))
     }, [offlineTodos])
 
     const renderTodos = userId && data?.ids.map(todoId => {
         const todo = data.entities[todoId] as ITodoDocument & { isTemp: boolean }
-        return <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} userId={userId} isTemp={todo.isTemp} />
+        return <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} userId={userId} isTemp={todo.isTemp} createdAt={todo.createdAt} />
     })
 
     const skeletons = useMemo(() => {
@@ -59,14 +60,18 @@ export default function TodoList() {
     if (userId) {
         if (isLoading) {
             return skeletons
-        } else if (isSuccess) {
+        } else if (isSuccess && renderTodos?.length) {
             return renderTodos
+        } else {
+            return <Typography>Empty.</Typography>
         }
     } else {
         if (hasLoadedOfflineTodo.current == false || isLoadingAuth) {
             return skeletons
-        } else {
+        } else if (renderOfflineTodos?.length) {
             return renderOfflineTodos
+        } else {
+            return <Typography>Empty.</Typography>
         }
     }
 

@@ -1,18 +1,26 @@
+'use client'
 import React from 'react'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import Link from 'next/link'
+import NewTodoForm from './components/NewTodoForm'
+import TodoList from './components/TodoList'
 
 const page = () => {
   return (
-    <>
-      <h1>Home</h1>
-      <List>
-        <ListItem>
-          <Link href='/todo'>Todo app</Link>
-        </ListItem>
-      </List>
-    </>
+    <div>
+      <NewTodoForm />
+
+      <div
+        style={{
+          margin: '0 auto',
+          maxWidth: '500px',
+          gap: 5,
+          marginTop: '1rem',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        <TodoList />
+      </div>
+    </div>
   )
 }
 

@@ -8,6 +8,7 @@ import StoreProvider from './StoreProvider';
 import ThemeProviderWrapper from './ThemeProviderWrapper';
 import Prefetch from './lib/features/auth/Prefetch';
 import CheckAuth from './lib/features/auth/CheckAuth';
+import Popup from './components/Popup';
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
@@ -16,10 +17,11 @@ const Providers = ({ children }: { children: ReactNode }) => {
 
         <CheckAuth>
           <Prefetch>
-            <p>Hello. We have updated to the version 1.1.1.1.1.1.1.7.6</p>
             <Header />
-            <Container component={Paper} sx={{ minHeight: '100vh', padding: '1rem'}}>
-              {children}
+            <Container component={Paper} sx={{ minHeight: '100vh', padding: '1rem' }}>
+              <Popup>
+                {children}
+              </Popup>
             </Container>
             <Footer />
           </Prefetch>

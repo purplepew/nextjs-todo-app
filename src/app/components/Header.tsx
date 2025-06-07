@@ -18,7 +18,6 @@ const Header = () => {
         <div style={{ marginLeft: 'auto' }}>
           {!token && <SignInButton />}
           {token && picture && name && <ProfileAvatar name={ name } picture={picture} />}
-          
         </div>
       </Toolbar>
     </AppBar>

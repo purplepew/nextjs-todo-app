@@ -40,13 +40,13 @@ export default function TodoList() {
 
     const renderOfflineTodos = useMemo(() => {
         return offlineTodos?.map(todo => (
-            <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} createdAt={todo.createdAt} />
+            <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id}/>
         ))
     }, [offlineTodos])
 
     const renderTodos = userId && data?.ids.map(todoId => {
         const todo = data.entities[todoId] as ITodoDocument & { isTemp: boolean }
-        return <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} userId={userId} isTemp={todo.isTemp} createdAt={todo.createdAt} />
+        return <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} userId={userId} isTemp={todo.isTemp} />
     })
 
     const skeletons = useMemo(() => {

@@ -15,8 +15,7 @@ const CheckAuth = ({ children }: { children: ReactNode }) => {
                 dispatch(setIsLoading(true))
                 await refresh()
                 dispatch(setIsLoading(false))
-            } catch (error) {
-                console.log(error)
+            } catch {
                 localStorage.setItem('isLoggedIn', 'false')
             }
         }

@@ -22,8 +22,6 @@ export default function TodoList() {
 
     const isLoadingAuth = useSelector((state: RootState) => state.auth.isLoading)
 
-    console.log('rerender')
-
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const todos = JSON.parse(localStorage.getItem('todos') ?? '[]')

@@ -6,12 +6,12 @@ export const metadata: Metadata = {
   title: "Simple To-Do App",
   description: "Boost your productivity with this SEO-friendly to-do app. Add, manage, and track tasks seamlessly.",
   keywords: ["to-do app", "task manager", "productivity tool", "task tracker", "organizer"],
-  authors: [{ name: "Todo", url: "https://nextjs-todo-app-drab.vercel.app/" }],
+  authors: [{ name: "Todo", url: process.env.NEXT_PUBLIC_BASE_URL }],
   creator: "Todo",
   openGraph: {
     title: "Smart and Simple To-Do App",
     description: "Manage your tasks effectively with our intuitive and fast to-do app.",
-    url: "https://nextjs-todo-app-drab.vercel.app/",
+    url: process.env.NEXT_PUBLIC_BASE_URL,
     siteName: "Smart and Simple To-Do App",
     images: [
       {

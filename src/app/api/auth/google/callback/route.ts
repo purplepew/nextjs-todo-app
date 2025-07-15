@@ -62,7 +62,6 @@ export const GET = async (req: NextRequest) => {
             })
             console.log("New user created.")
         }
-        
 
     } catch {
        // console.log('Error during mongodb query:', error);

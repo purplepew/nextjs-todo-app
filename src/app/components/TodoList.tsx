@@ -21,19 +21,22 @@ export default function TodoList() {
 
     const isLoadingAuth = useSelector((state: RootState) => state.auth.isLoading)
 
+    console.log('isLoadingAuth: ', isLoadingAuth)
+    console.log('hasLoadedOfflineTodo: ', hasLoadedOfflineTodo.current)
+
     // Initialize the offlineTodos state with the datas in the localStorage
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const todos = JSON.parse(localStorage.getItem('todos') ?? '[]')
             if (Array.isArray(todos) && todos.length > 0) {
                 dispatch(initializeTodo({ todos }))
-                hasLoadedOfflineTodo.current = true
             }
+            hasLoadedOfflineTodo.current = true
         }
     }, [dispatch])
-    
+
     // Saves todos in the localStorage. On initial load and when offlineTodos state changes
-    useEffect(() => { 
+    useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('todos', JSON.stringify(offlineTodos))
         }
@@ -51,16 +54,18 @@ export default function TodoList() {
     })
 
     if (userId) {
+        // FOR THE TODO WITH ACCOUNT
         if (isLoading) {
-            return <Typography>Loading...</Typography>
+            return <Typography>Loading... Expect todo cards in 3. 2. 1.</Typography>
         } else if (isSuccess && renderTodos?.length) {
             return renderTodos
         } else {
             return <Typography>Empty.</Typography>
         }
     } else {
+        // FOR THE OFFLINE TODO
         if (hasLoadedOfflineTodo.current == false || isLoadingAuth) {
-            return <Typography>Loading...</Typography>
+            return <Typography>Loading... Expect me in 3. 2. 1.</Typography>
         } else if (renderOfflineTodos?.length) {
             return renderOfflineTodos
         } else {

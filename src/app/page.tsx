@@ -28,9 +28,17 @@ const page = () => {
   return (
     <div>
 
-      <Suspense fallback={<Skeleton variant='rectangular' sx={{ ...skeletonProps, m: '0 auto', maxWidth: '20.5rem'}} />}>
+      <Suspense
+        fallback={
+          <div style={{ display: 'grid', margin: '0 auto', maxWidth: '500px', gap: 3, gridTemplateColumns: '1fr .25fr' }}>
+            <Skeleton sx={{ height: '4rem' }} />
+            <Skeleton sx={{ height: '4rem' }} />
+          </div>
+        }
+      >
         <NewTodoForm />
       </Suspense>
+
 
       <div
         style={{

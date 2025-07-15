@@ -1,7 +1,6 @@
 'use client';
 import { ReactNode } from 'react'
 import Header from './components/Header'
-import Footer from './components/Footer'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import StoreProvider from './StoreProvider';
@@ -14,7 +13,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <StoreProvider>
       <ThemeProviderWrapper>
-
         <CheckAuth>
           <Prefetch>
             <Header />
@@ -23,7 +21,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
                 {children}
               </Popup>
             </Container>
-            <Footer />
           </Prefetch>
         </CheckAuth>
 

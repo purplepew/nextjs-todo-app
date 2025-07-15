@@ -1,6 +1,10 @@
 'use server'
 import mongoose from "mongoose";
 
+if (!process.env.MONGODB_URI) {
+  throw new Error('MONGODB_URI is not defined in the environment variables.');
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let cached = (global as any).mongoose;
 

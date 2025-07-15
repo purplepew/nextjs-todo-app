@@ -4,9 +4,10 @@ import { selectCurrentToken } from '../lib/features/auth/authSlice'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import ProfileAvatar from './ProfileAvatar'
-import SignInButton from './SignInButton'
-import useAuth from './hooks/useAuth'
+import useAuth from '../hooks/useAuth'
+import dynamic from 'next/dynamic'
+const SignInButton = dynamic(() => import('./SignInButton'))
+const ProfileAvatar = dynamic(() => import('./ProfileAvatar'))
 
 const Header = () => {
   const token = useAppSelector(selectCurrentToken)
@@ -17,7 +18,7 @@ const Header = () => {
         <Typography component={'a'} href='/'>Todo</Typography>
         <div style={{ marginLeft: 'auto' }}>
           {!token && <SignInButton />}
-          {token && picture && name && <ProfileAvatar name={ name } picture={picture} />}
+          {token && picture && name && <ProfileAvatar name={name} picture={picture} />}
         </div>
       </Toolbar>
     </AppBar>

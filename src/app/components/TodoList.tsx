@@ -1,14 +1,14 @@
-import useAuth from "@/app/components/hooks/useAuth";
-import { useGetTodosQuery } from "@/app/lib/features/todo/todoApiSlice";
-import { selectAllOfflineTodos, initializeTodo } from "@/app/lib/features/todo/todoSlice";
-import { useEffect, useMemo, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+'use client'
+import useAuth from "@/app/hooks/useAuth"
+import { useGetTodosQuery } from "@/app/lib/features/todo/todoApiSlice"
+import { selectAllOfflineTodos, initializeTodo } from "@/app/lib/features/todo/todoSlice"
+import { useEffect, useMemo, useRef } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import TodoCard from './TodoCard'
 import Skeleton from '@mui/material/Skeleton'
 import Typography from '@mui/material/Typography'
-import { RootState } from "@/app/lib/store";
-import { ITodoDocument } from "@/app/lib/models/todoModel";
-
+import { RootState } from "@/app/lib/store"
+import { ITodoDocument } from "@/app/lib/models/todoModel"
 
 export default function TodoList() {
     const dispatch = useDispatch()
@@ -47,17 +47,9 @@ export default function TodoList() {
         return <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} userId={userId} isTemp={todo.isTemp} />
     })
 
-    const skeletons = useMemo(() => {
-        return Array.from({ length: 3 }, (_, i) => i).map(i => {
-            return (
-                <Skeleton key={i} variant='rectangular' sx={{ borderRadius: 1, height: '2rem', minWidth: '20.5rem' }} />
-            )
-        })
-    }, [])
-
     if (userId) {
         if (isLoading) {
-            return skeletons
+            return <Typography>Loading...</Typography>
         } else if (isSuccess && renderTodos?.length) {
             return renderTodos
         } else {
@@ -65,7 +57,7 @@ export default function TodoList() {
         }
     } else {
         if (hasLoadedOfflineTodo.current == false || isLoadingAuth) {
-            return skeletons
+            return <Typography>Loading...</Typography>
         } else if (renderOfflineTodos?.length) {
             return renderOfflineTodos
         } else {

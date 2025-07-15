@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react'
 import todoApiSlice from '../todo/todoApiSlice'
-import useAuth from '@/app/components/hooks/useAuth'
+import useAuth from '@/app/hooks/useAuth'
 import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch } from '../../store'
 import { selectCurrentToken } from './authSlice'

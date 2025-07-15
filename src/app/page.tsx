@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import NewTodoForm from './components/NewTodoForm'
 import Skeleton from '@mui/material/Skeleton'
 import dynamic from 'next/dynamic'
@@ -20,7 +20,9 @@ const TodoList = dynamic(
 const page = () => {
   return (
     <div>
-      <NewTodoForm />
+      <Suspense fallback={<p>Loading input field</p>}>
+        <NewTodoForm />
+      </Suspense>
       <div
         style={{
           margin: '0 auto',
@@ -33,7 +35,7 @@ const page = () => {
       >
         <TodoList />
       </div>
-    </div>
+    </div >
   )
 }
 

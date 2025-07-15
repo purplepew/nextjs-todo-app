@@ -5,7 +5,6 @@ import { selectAllOfflineTodos, initializeTodo } from "@/app/lib/features/todo/t
 import { useEffect, useMemo, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import TodoCard from './TodoCard'
-import Skeleton from '@mui/material/Skeleton'
 import Typography from '@mui/material/Typography'
 import { RootState } from "@/app/lib/store"
 import { ITodoDocument } from "@/app/lib/models/todoModel"

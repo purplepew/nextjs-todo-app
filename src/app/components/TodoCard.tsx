@@ -22,7 +22,6 @@ function TodoCard(
     const dispatch = useDispatch()
     const hasLongTitle: boolean = title.length > 50 ? true : false
 
-
     const handleDeleteTodo = async () => {
         if (userId) {
             try {
@@ -93,6 +92,7 @@ function TodoCard(
                     <Typography
                         sx={{
                             minWidth: '15rem',
+                            maxWidth: '25rem',
                             textDecoration: completed ? 'line-through' : 'none',
                             color: !completed ? 'rgba(225,225,225, 1)' : 'rgba(225,225,225, .2)',
                             maxHeight: '20rem',

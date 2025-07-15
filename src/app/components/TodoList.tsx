@@ -22,15 +22,19 @@ export default function TodoList() {
 
     const isLoadingAuth = useSelector((state: RootState) => state.auth.isLoading)
 
+    // Initialize the offlineTodos state with the datas in the localStorage
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const todos = JSON.parse(localStorage.getItem('todos') ?? '[]')
-            dispatch(initializeTodo({ todos }))
-            hasLoadedOfflineTodo.current = true
+            if (Array.isArray(todos) && todos.length > 0) {
+                dispatch(initializeTodo({ todos }))
+                hasLoadedOfflineTodo.current = true
+            }
         }
     }, [dispatch])
-
-    useEffect(() => {
+    
+    // Saves todos in the localStorage. On initial load and when offlineTodos state changes
+    useEffect(() => { 
         if (typeof window !== 'undefined') {
             localStorage.setItem('todos', JSON.stringify(offlineTodos))
         }
@@ -38,7 +42,7 @@ export default function TodoList() {
 
     const renderOfflineTodos = useMemo(() => {
         return offlineTodos?.map(todo => (
-            <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id}/>
+            <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} />
         ))
     }, [offlineTodos])
 

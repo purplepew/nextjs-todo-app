@@ -34,7 +34,7 @@ const NewTodoForm = () => {
         params.set(name, value)
 
         return params.toString()
-    }, [searchParams])
+    }, [searchParams, pathname, router])
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()

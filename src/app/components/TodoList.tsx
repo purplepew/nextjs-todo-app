@@ -62,7 +62,7 @@ export default function TodoList() {
     if (userId) {
         // FOR THE TODO WITH ACCOUNT
         if (isLoading) {
-            return Skeleton
+            return skeletons
         } else if (isSuccess && renderTodos?.length) {
             return renderTodos
         } else {
@@ -71,7 +71,7 @@ export default function TodoList() {
     } else {
         // FOR THE OFFLINE TODO
         if (hasLoadedOfflineTodo.current == false || isLoadingAuth) {
-            return Skeleton
+            return skeletons
         } else if (renderOfflineTodos?.length) {
             return renderOfflineTodos
         } else {

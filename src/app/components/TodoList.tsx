@@ -8,6 +8,7 @@ import TodoCard from './TodoCard'
 import Typography from '@mui/material/Typography'
 import { RootState } from "@/app/lib/store"
 import { ITodoDocument } from "@/app/lib/models/todoModel"
+import Skeleton from "@mui/material/Skeleton"
 
 export default function TodoList() {
     const dispatch = useDispatch()
@@ -20,9 +21,6 @@ export default function TodoList() {
     })
 
     const isLoadingAuth = useSelector((state: RootState) => state.auth.isLoading)
-
-    console.log('isLoadingAuth: ', isLoadingAuth)
-    console.log('hasLoadedOfflineTodo: ', hasLoadedOfflineTodo.current)
 
     // Initialize the offlineTodos state with the datas in the localStorage
     useEffect(() => {
@@ -53,10 +51,18 @@ export default function TodoList() {
         return <TodoCard title={todo.title} todoId={todo.id} completed={todo.completed} key={todo.id} userId={userId} isTemp={todo.isTemp} />
     })
 
+    const skeletons = useMemo(() => {
+        return Array.from({ length: 3 }, (_, i) => i).map(i => {
+            return (
+                <Skeleton key={i} variant='rectangular' sx={{ borderRadius: 1, height: '2rem', minWidth: '20.5rem' }} />
+            )
+        })
+    }, [])
+
     if (userId) {
         // FOR THE TODO WITH ACCOUNT
         if (isLoading) {
-            return <Typography>Loading... Expect todo cards in 3. 2. 1.</Typography>
+            return Skeleton
         } else if (isSuccess && renderTodos?.length) {
             return renderTodos
         } else {
@@ -65,7 +71,7 @@ export default function TodoList() {
     } else {
         // FOR THE OFFLINE TODO
         if (hasLoadedOfflineTodo.current == false || isLoadingAuth) {
-            return <Typography>Loading... Expect me in 3. 2. 1.</Typography>
+            return Skeleton
         } else if (renderOfflineTodos?.length) {
             return renderOfflineTodos
         } else {

@@ -4,15 +4,10 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TodoCard from '../TodoCard'
 import { Typography } from '@mui/material'
-import { TodoSkeleton } from '../TodoCard'
 import { RootState } from '@/app/lib/store'
 
 export default function TodoList() {
     const dispatch = useDispatch()
-
-    const isLoadingAuth = useSelector((state: RootState) => state.auth.isLoading)
-
-    const hasLoadedOfflineTodo = useRef(false)
 
     const offlineTodos = useSelector(selectAllOfflineTodos)
 
@@ -23,7 +18,6 @@ export default function TodoList() {
             if (Array.isArray(todos) && todos.length > 0) {
                 dispatch(initializeTodo({ todos }))
             }
-            hasLoadedOfflineTodo.current = true
         }
     }, [dispatch])
 
@@ -40,15 +34,7 @@ export default function TodoList() {
         ))
     }, [offlineTodos])
 
-    if (hasLoadedOfflineTodo.current == false || isLoadingAuth) {
-        return (
-            <>
-                <TodoSkeleton />
-                <TodoSkeleton />
-                <TodoSkeleton />
-            </>
-        )
-    } else if (renderOfflineTodos?.length) {
+    if (renderOfflineTodos?.length) {
         return renderOfflineTodos
     } else {
         return <Typography>Empty.</Typography>

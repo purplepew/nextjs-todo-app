@@ -1,10 +1,9 @@
 'use client'
 import { initializeTodo, selectAllOfflineTodos } from '@/app/lib/features/todo/todoSlice'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TodoCard from '../TodoCard'
 import { Typography } from '@mui/material'
-import { RootState } from '@/app/lib/store'
 
 export default function TodoList() {
     const dispatch = useDispatch()

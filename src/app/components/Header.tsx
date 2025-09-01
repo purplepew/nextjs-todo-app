@@ -6,6 +6,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import useAuth from '../hooks/useAuth'
 import dynamic from 'next/dynamic'
+import { Skeleton } from '@mui/material'
 const SignInButton = dynamic(() => import('./SignInButton'))
 const ProfileAvatar = dynamic(() => import('./ProfileAvatar'))
 
@@ -24,5 +25,13 @@ const Header = () => {
     </AppBar>
   )
 }
+
+export const HeaderSkeleton = () => (
+  <Skeleton
+    variant='rectangular'
+    height={60}
+    width={'100%'}
+  />
+)
 
 export default Header

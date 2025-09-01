@@ -7,7 +7,6 @@ import StoreProvider from './StoreProvider';
 import ThemeProviderWrapper from './ThemeProviderWrapper';
 import Prefetch from './lib/features/auth/Prefetch';
 import CheckAuth from './lib/features/auth/CheckAuth';
-import Popup from './components/Popup';
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
@@ -17,20 +16,13 @@ const Providers = ({ children }: { children: ReactNode }) => {
           <Prefetch>
             <Header />
             <Container component={Paper} sx={{ minHeight: '100vh', padding: '1rem' }}>
-              <Popup>
-                {children}
-              </Popup>
+              {children}
             </Container>
           </Prefetch>
         </CheckAuth>
-
       </ThemeProviderWrapper>
     </StoreProvider>
   )
 }
 
 export default Providers;
-
-export async function wait(n: number) {
-  return new Promise(res => setTimeout(res, n))
-}

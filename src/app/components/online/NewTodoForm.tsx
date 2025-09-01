@@ -6,13 +6,10 @@ import Snackbar from '@mui/material/Snackbar'
 import AddIcon from '@mui/icons-material/Add'
 import useAuth from '@/app/hooks/useAuth'
 import { useAddTodoMutation } from '@/app/lib/features/todo/todoApiSlice'
-import { useDispatch } from 'react-redux'
-import { addTodoOffline } from '@/app/lib/features/todo/todoSlice'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { Skeleton } from '@mui/material'
 
 const NewTodoForm = () => {
-    const dispatch = useDispatch()
-
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -34,37 +31,37 @@ const NewTodoForm = () => {
         params.set(name, value)
 
         return params.toString()
-    }, [searchParams, pathname, router])
+    }, [searchParams])
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        if (!id) {
+            setErrMsg('Not signed in. Try refreshing your browser.')
+            setTitle(previousUrlRef.current ?? "")
+            return null
+        }
+
         if (!title) return setErrMsg('A title is required.')
 
-        if (!id) {
-            dispatch(addTodoOffline({ title, completed: false, id: crypto.randomUUID() }))
+        const cacheTitle = title
+
+        try {
+            previousUrlRef.current = searchParams.get("title")
+
             setTitle('')
+
+            await addTodo({ title: cacheTitle, userId: id }).unwrap()
+
             router.push(pathname)
+
             inputRef?.current?.focus()
-        } else {
-            const cacheTitle = title
-            try {
-                previousUrlRef.current = searchParams.get("title")
-                
-                setTitle('')
-                
-                await addTodo({ title: cacheTitle, userId: id }).unwrap()
 
-                router.push(pathname)
-
-                inputRef?.current?.focus()
-
-            } catch (error) {
-                const err = error as unknown as { status?: number, data?: { message: string }, message: string }
-                const message = err.status == 401 ? 'Please log in.' : err?.data?.message ?? err.message
-                setErrMsg(message)
-                setTitle(previousUrlRef.current ?? "")
-            }
+        } catch (error) {
+            const err = error as unknown as { status?: number, data?: { message: string }, message: string }
+            const message = err.status == 401 ? 'Please log in.' : err?.data?.message ?? err.message
+            setErrMsg(message)
+            setTitle(previousUrlRef.current ?? "")
         }
     }
 
@@ -77,7 +74,7 @@ const NewTodoForm = () => {
         }, 20)
 
         return () => clearTimeout(setter)
-    }, [title])
+    }, [title, createQueryString, pathname, router])
 
     return (
         <form onSubmit={handleSubmit}
@@ -103,9 +100,24 @@ const NewTodoForm = () => {
                 <AddIcon />
             </Button>
 
-            <Snackbar aria-label='error popup' autoHideDuration={5000} message={errMsg} open={Boolean(errMsg)} onClose={() => setErrMsg('')} />
+            <Snackbar
+                aria-label='error popup'
+                autoHideDuration={5000}
+                message={errMsg}
+                open={Boolean(errMsg)}
+                onClose={() => setErrMsg('')}
+            />
 
         </form>
+    )
+}
+
+export function NewTodoFormSkeleton() {
+    return (
+        <div style={{ display: 'grid', margin: '0 auto', maxWidth: '500px', gap: 3, gridTemplateColumns: '1fr .25fr' }}>
+            <Skeleton sx={{ height: '4rem' }} />
+            <Skeleton sx={{ height: '4rem' }} />
+        </div>
     )
 }
 

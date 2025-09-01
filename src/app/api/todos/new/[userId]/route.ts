@@ -33,6 +33,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'New todo created.', todo: newTodo})
     } catch (error) {
         console.log('failed to create a new todo ', error)
-        return NextResponse.json({ message: 'failed to create a new todo ' + error }, { status: 500 })
+        return NextResponse.json({ message: 'failed to create a new todo ' }, { status: 500 })
     }
 }

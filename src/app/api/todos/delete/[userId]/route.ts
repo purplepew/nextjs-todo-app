@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     try {
 
         await connectToMongoDB()
-        
+
         const foundUser = await User.findById(userId).lean().exec()
 
         if (!foundUser) {
@@ -37,6 +37,8 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ message: 'Todo deleted.', result })
     } catch (error) {
-        console.log(error)
+        console.log('failed to delete todo ', error)
+        return NextResponse.json({ message: 'failed to delete todo '}, { status: 500 })
+
     }
 }

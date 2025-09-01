@@ -11,10 +11,41 @@ import { useCheckTodoMutation, useDeleteTodoMutation } from '@/app/lib/features/
 import { memo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { checkTodoOffline, removeTodoOffline } from '@/app/lib/features/todo/todoSlice'
+import { Skeleton } from '@mui/material'
+import { ApiResponse } from '../lib/types'
+
+function CheckComponent({ completed, handleCheckTodo, isTemp }: { completed: boolean, handleCheckTodo: () => void, isTemp: boolean }) {
+    return !completed
+        ? (
+            <IconButton aria-label='check todo' onClick={handleCheckTodo} disabled={isTemp}>
+                <CheckIcon color='primary' />
+            </IconButton>
+        )
+        : (
+            <IconButton aria-label='uncheck todo' onClick={handleCheckTodo} disabled={isTemp}>
+                <UndoIcon color='error' />
+            </IconButton>
+        )
+}
+
+function DeleteComponent({ handleDeleteTodo, isTemp }: { handleDeleteTodo: () => void, isTemp: boolean }) {
+    return (
+        <IconButton aria-label='delete todo' disabled={isTemp} onClick={handleDeleteTodo} sx={{ '&:hover': { backgroundColor: 'firebrick' } }}>
+            <DeleteIcon />
+        </IconButton>
+    )
+}
 
 function TodoCard(
-    { title, userId, todoId, completed = false, isTemp = false }:
-        { title: string, userId?: string, todoId: string, completed?: boolean, isTemp?: boolean }
+    { title, userId, todoId, completed = false, isTemp = false, throwError }:
+        {
+            title: string,
+            userId?: string,
+            todoId: string,
+            completed?: boolean,
+            isTemp?: boolean,
+            throwError?: (message: string) => void
+        }
 ) {
     const [open, setOpen] = useState(false)
     const [deleteTodo] = useDeleteTodoMutation()
@@ -27,7 +58,9 @@ function TodoCard(
             try {
                 await deleteTodo({ todoId, userId }).unwrap()
             } catch (error) {
-                console.log(error)
+                const err = error as unknown as ApiResponse
+                const message = err.status == 401 ? 'Please log in.' : err?.data?.message ?? err.message
+                if (throwError) throwError(message)
             }
         } else {
             dispatch(removeTodoOffline({ id: todoId }))
@@ -39,34 +72,15 @@ function TodoCard(
             try {
                 await checkTodo({ todoId, userId }).unwrap()
             } catch (error) {
-                console.log(error)
+                const err = error as unknown as ApiResponse
+                const message = err.status == 401 ? 'Please log in.' : err?.data?.message ?? err.message
+                if (throwError) throwError(message)
             }
         } else {
             dispatch(checkTodoOffline({ id: todoId, completed }))
         }
     }
 
-    const CheckComponent = () => {
-        return !completed
-            ? (
-                <IconButton aria-label='check todo' onClick={handleCheckTodo} disabled={isTemp}>
-                    <CheckIcon color='primary' />
-                </IconButton>
-            )
-            : (
-                <IconButton aria-label='uncheck todo' onClick={handleCheckTodo} disabled={isTemp}>
-                    <UndoIcon color='error' />
-                </IconButton>
-            )
-    }
-
-    const DeleteComponent = () => {
-        return (
-            <IconButton aria-label='delete todo' disabled={isTemp} onClick={handleDeleteTodo} sx={{ '&:hover': { backgroundColor: 'firebrick' } }}>
-                <DeleteIcon />
-            </IconButton>
-        )
-    }
 
     const handleToggleOpen = () => {
         if (title.length > 50) {
@@ -108,8 +122,8 @@ function TodoCard(
                 </Collapse>
 
                 <div style={{ display: 'flex', alignItems: 'center', minWidth: '5rem' }}>
-                    <DeleteComponent />
-                    <CheckComponent />
+                    <DeleteComponent handleDeleteTodo={handleDeleteTodo} isTemp={isTemp} />
+                    <CheckComponent completed={completed} handleCheckTodo={handleCheckTodo} isTemp={isTemp} />
                 </div>
 
             </Box>
@@ -117,6 +131,13 @@ function TodoCard(
     )
 }
 
+
 const memoized = memo(TodoCard)
 
 export default memoized
+
+export function TodoSkeleton() {
+    return (
+        <Skeleton variant='rectangular' sx={{ borderRadius: 1, height: '2rem', minWidth: '20.5rem' }} />
+    )
+}

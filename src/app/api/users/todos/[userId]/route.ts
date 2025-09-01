@@ -25,6 +25,6 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(foundUserWithTodos?.todos)
     } catch (error) {
         console.log('failed to fetch todos ', error)
-        return NextResponse.json({ message: 'failed to fetch todos ' + error }, { status: 400 })
+        return NextResponse.json({ message: 'failed to fetch todos '}, { status: 400 })
     }
 }

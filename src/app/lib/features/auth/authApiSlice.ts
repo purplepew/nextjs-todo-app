@@ -9,15 +9,12 @@ const authApiSlice = apiSlice.injectEndpoints({
                 url: '/api/auth/refresh',
                 method: 'GET',
             }),
-            onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+            onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
                 try {
                     const { data } = await queryFulfilled
                     const { accessToken } = data
                     dispatch(setCredentials({ accessToken }))
-                    localStorage.setItem('isLoggedIn', 'true')
-                } catch (err) {
-                    console.log(err)
-                }
+                } catch {}
             }
         }),
         logout: builder.mutation<void, void>({
@@ -25,16 +22,14 @@ const authApiSlice = apiSlice.injectEndpoints({
                 url: '/api/auth/logout',
                 method: 'POST'
             }),
-            onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+            onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
                 try {
                     await queryFulfilled
                     dispatch(logout())
                     dispatch(apiSlice.util.resetApiState())
                     localStorage.setItem('isLoggedIn', 'false')
                     location.reload()
-                } catch (err) {
-                    console.log(err)
-                }
+                } catch {}
             }
         })
     })

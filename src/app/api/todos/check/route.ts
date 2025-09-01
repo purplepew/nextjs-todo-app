@@ -6,7 +6,7 @@ import { connectToMongoDB } from "@/app/lib/db";
 export async function POST(req: NextRequest) {
     const { todoId } = await req.json()
 
-   if (!todoId || typeof todoId != 'string') {
+    if (!todoId || typeof todoId != 'string') {
         return NextResponse.json({ message: 'todoId is required.' }, { status: 400 })
     }
 
@@ -25,7 +25,9 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ message: todo.completed ? 'Todo checked.' : 'Todo unchecked' })
     } catch (error) {
-        console.log(error)
+        console.log('failed to check todo ', error)
+        return NextResponse.json({ message: 'failed to check/uncheck todo ' }, { status: 500 })
+
     }
 
 }

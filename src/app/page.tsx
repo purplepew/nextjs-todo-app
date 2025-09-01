@@ -1,44 +1,18 @@
-'use client'
 import React, { Suspense } from 'react'
-import NewTodoForm from './components/NewTodoForm'
-import Skeleton from '@mui/material/Skeleton'
-import dynamic from 'next/dynamic'
-
-const skeletonProps = {
-  borderRadius: 1,
-  height: '2rem',
-  minWidth: '20.5rem'
-}
-
-const TodoList = dynamic(
-  () => import('./components/TodoList'),
-  {
-    loading: () => (
-      <>
-        <Skeleton variant='rectangular' sx={{ ...skeletonProps }} />
-        <Skeleton variant='rectangular' sx={{ ...skeletonProps }} />
-        <Skeleton variant='rectangular' sx={{ ...skeletonProps }} />
-      </>
-    ),
-    ssr: false
-  }
-)
+import NewTodoForm from './components/online/NewTodoForm'
+import TodoListOnline from './components/online/TodoList'
+import { NewTodoFormSkeleton } from './components/online/NewTodoForm'
 
 const page = () => {
+
   return (
     <div>
-
+      {/** The Suspense is needed for the url state management */}
       <Suspense
-        fallback={
-          <div style={{ display: 'grid', margin: '0 auto', maxWidth: '500px', gap: 3, gridTemplateColumns: '1fr .25fr' }}>
-            <Skeleton sx={{ height: '4rem' }} />
-            <Skeleton sx={{ height: '4rem' }} />
-          </div>
-        }
+        fallback={<NewTodoFormSkeleton />}
       >
-        <NewTodoForm />
+        < NewTodoForm />
       </Suspense>
-
 
       <div
         style={{
@@ -50,7 +24,7 @@ const page = () => {
           flexDirection: 'column'
         }}
       >
-        <TodoList />
+        <TodoListOnline />
       </div>
     </div >
   )

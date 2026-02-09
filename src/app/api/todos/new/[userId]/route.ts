@@ -33,6 +33,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'New todo created.', todo: newTodo})
     } catch (error) {
         console.log('failed to create a new todo ', error)
+        
+        // Check if it's a MongoDB inactive error
+        if (error instanceof Error && error.message === 'MongoDB Database is Inactive') {
+            return NextResponse.json({ message: 'MongoDB Database is Inactive' }, { status: 503 })
+        }
+        
         return NextResponse.json({ message: 'failed to create a new todo ' }, { status: 500 })
     }
 }

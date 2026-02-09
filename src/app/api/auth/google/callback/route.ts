@@ -63,8 +63,14 @@ export const GET = async (req: NextRequest) => {
             console.log("New user created.")
         }
 
-    } catch {
-       // console.log('Error during mongodb query:', error);
+    } catch (error) {
+        console.log('Error during mongodb query:', error);
+        
+        // Check if it's a MongoDB inactive error
+        if (error instanceof Error && error.message === 'MongoDB Database is Inactive') {
+            return NextResponse.json({ error: 'MongoDB Database is Inactive' }, { status: 503 });
+        }
+        
         return NextResponse.json({ error: 'An error occurred during mongodb query.' }, { status: 500 });
     }
 

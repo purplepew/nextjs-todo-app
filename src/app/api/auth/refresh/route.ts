@@ -44,6 +44,11 @@ export const GET = async (req: NextRequest) => {
         return NextResponse.json({ accessToken })
 
     } catch (error) {
+        // Check if it's a MongoDB inactive error
+        if (error instanceof Error && error.message === 'MongoDB Database is Inactive') {
+            return NextResponse.json({ message: 'MongoDB Database is Inactive' }, { status: 503 })
+        }
+        
         if (error instanceof TokenExpiredError) {
             return NextResponse.json({ message: 'Token has expired'}, { status: 401 })
         }

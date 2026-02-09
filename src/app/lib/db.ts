@@ -37,7 +37,9 @@ export async function connectToMongoDB() {
       const errorMessage = error.message.toLowerCase();
       if (
         errorMessage.includes('timeout') ||
-        errorMessage.includes('connection') ||
+        errorMessage.includes('connection refused') ||
+        errorMessage.includes('connection closed') ||
+        errorMessage.includes('connection lost') ||
         errorMessage.includes('econnrefused') ||
         errorMessage.includes('topology') ||
         errorMessage.includes('server selection') ||

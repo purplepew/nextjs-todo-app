@@ -11,9 +11,11 @@ if (!process.env.JWT_REFRESH_TOKEN_SECRET ) {
 if (!process.env.NEXT_PUBLIC_BASE_URL) {
     throw new Error('NEXT_PUBLIC_BASE_URL is not defined in the environment variables.');
 }
+
 if (!process.env.GOOGLE_CLIENT_ID) {
     throw new Error('GOOGLE_CLIENT_ID is not defined in the environment variables.');
 }
+
 
 export const GET = async (req: NextRequest) => {
     const code = req.nextUrl.searchParams.get('code')

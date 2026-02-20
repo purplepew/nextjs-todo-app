@@ -11,13 +11,9 @@ const SignInButton = () => {
                 .then(response => response.json())
                 .then(result => {
                     setLink(result)
-                    localStorage.setItem('linkGoogleSignIn', result)
                 })
         }
-        const googleSignInLink = localStorage.getItem('linkGoogleSignIn')
-
-        if (!googleSignInLink) getGoogleSignInLink()
-        else setLink(googleSignInLink)
+        getGoogleSignInLink()
 
     }, [])
 

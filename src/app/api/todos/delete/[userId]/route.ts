@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'Todo deleted.', result })
     } catch (error) {
         console.log('failed to delete todo ', error)
-        return NextResponse.json({ message: 'failed to delete todo '}, { status: 500 })
+        return NextResponse.json({ message: 'Failed to delete todo. The database may be temporarily unavailable, please try again.' }, { status: 500 })
 
     }
 }

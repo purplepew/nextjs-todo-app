@@ -25,7 +25,7 @@ export const GET = async (req: NextRequest) => {
         const foundUser = await User.findById(decoded.UserInfo.id).lean().exec()
 
         if (!foundUser) {
-            return NextResponse.json({ message: 'Internal server error. Could not find user' }, { status: 500 })
+            return NextResponse.json({ message: 'User not found.' }, { status: 404 })
         }
 
         const accessToken = jwt.sign(

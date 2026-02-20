@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: todo.completed ? 'Todo checked.' : 'Todo unchecked' })
     } catch (error) {
         console.log('failed to check todo ', error)
-        return NextResponse.json({ message: 'failed to check/uncheck todo ' }, { status: 500 })
+        return NextResponse.json({ message: 'Failed to check/uncheck todo. The database may be temporarily unavailable, please try again.' }, { status: 500 })
 
     }
 

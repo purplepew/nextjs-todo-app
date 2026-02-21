@@ -11,13 +11,8 @@ export interface ITodoOffline {
 
 const todosAdapter = createEntityAdapter<ITodoOffline, string>({
     selectId: (todo) => todo.id as string,
-    sortComparer: (a, b) => {
-        if (a.completed !== b.completed) {
-            return a.completed ? 1 : -1
-        }
-
-        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-    }
+    // Remove sortComparer to disable automatic sorting
+    // This allows drag-and-drop order to persist
 })
 
 const initialState = todosAdapter.getInitialState()
@@ -40,12 +35,28 @@ const todoSlice = createSlice({
         initializeTodo: (state, action: { payload: { todos: ITodoOffline[] } }) => {
             const { todos } = action.payload
             todosAdapter.setAll(state, todos)
+        },
+        reorderTodos: (state, action: { payload: { orderedIds: string[] } }) => {
+            const { orderedIds } = action.payload
+            const entities = state.entities
+            const reorderedTodos: ITodoOffline[] = []
+            
+            console.log('[todoSlice] Reordering todos with orderedIds:', orderedIds)
+            
+            orderedIds.forEach(id => {
+                if (entities[id]) {
+                    reorderedTodos.push(entities[id]!)
+                }
+            })
+            
+            console.log('[todoSlice] Reordered todos:', reorderedTodos.map(t => t.id))
+            todosAdapter.setAll(state, reorderedTodos)
         }
     }
 })
 
 export default todoSlice.reducer
 
-export const { addTodoOffline, checkTodoOffline, removeTodoOffline, initializeTodo } = todoSlice.actions
+export const { addTodoOffline, checkTodoOffline, removeTodoOffline, initializeTodo, reorderTodos } = todoSlice.actions
 
 export const { selectAll: selectAllOfflineTodos } = todosAdapter.getSelectors((state: RootState) => state.todo ?? initialState)

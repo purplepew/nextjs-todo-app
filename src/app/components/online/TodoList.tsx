@@ -12,7 +12,6 @@ export default function TodoList() {
     const { id: userId } = useAuth()
     const [errMsg, setErrMsg] = useState('')
     const [orderedIds, setOrderedIds] = useState<string[]>([])
-    const [dragOverId, setDragOverId] = useState<string | null>(null)
     const draggedIdRef = useRef<string | null>(null)
     const dragOverIdRef = useRef<string | null>(null)
 
@@ -49,7 +48,6 @@ export default function TodoList() {
         // Skip if still over the same element to avoid excessive state updates
         if (dragOverIdRef.current === overId) return
         dragOverIdRef.current = overId
-        setDragOverId(overId)
         setOrderedIds(prev => {
             const fromIndex = prev.indexOf(draggedIdRef.current!)
             const toIndex = prev.indexOf(overId)
@@ -64,7 +62,6 @@ export default function TodoList() {
     const handleDragEnd = useCallback(() => {
         draggedIdRef.current = null
         dragOverIdRef.current = null
-        setDragOverId(null)
     }, [])
 
     // FOR THE TODO WITH ACCOUNT

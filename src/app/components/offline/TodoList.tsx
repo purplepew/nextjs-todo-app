@@ -19,7 +19,6 @@ export default function TodoList() {
         }
         return []
     })
-    const [dragOverId, setDragOverId] = useState<string | null>(null)
     const draggedIdRef = useRef<string | null>(null)
     const dragOverIdRef = useRef<string | null>(null)
 
@@ -78,7 +77,6 @@ export default function TodoList() {
         // Skip if still over the same element to avoid excessive state updates
         if (dragOverIdRef.current === overId) return
         dragOverIdRef.current = overId
-        setDragOverId(overId)
         console.log('[TodoList] Dragging', draggedIdRef.current, 'over', overId)
         setOrderedIds(prev => {
             const fromIndex = prev.indexOf(draggedIdRef.current!)
@@ -96,7 +94,6 @@ export default function TodoList() {
         console.log('[TodoList] Drag ended, current orderedIds:', orderedIds)
         draggedIdRef.current = null
         dragOverIdRef.current = null
-        setDragOverId(null)
         // Save order to localStorage after drag completes
         if (typeof window !== 'undefined') {
             console.log('[TodoList] Saving order after drag end:', orderedIds)

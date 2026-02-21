@@ -83,7 +83,6 @@ export default function TodoList() {
                     const todo = data?.entities[todoId] as ITodoDocument & { isTemp: boolean }
                     if (!todo) return null
                     const isDragging = draggedIdRef.current === todoId
-                    const isOver = dragOverId === todoId && !isDragging
                     return (
                         <div
                             key={todoId}
@@ -92,9 +91,9 @@ export default function TodoList() {
                             onDragOver={(e) => handleDragOver(e, todoId)}
                             onDragEnd={handleDragEnd}
                             style={{
-                                opacity: isDragging ? 0.4 : 1,
-                                cursor: 'grab',
-                                outline: isOver ? '2px dashed #90caf9' : 'none',
+                                opacity: 1,
+                                cursor: 'pointer',
+                                outline: isDragging ? '2px dashed #90caf9' : 'none',
                                 borderRadius: 4,
                             }}
                         >

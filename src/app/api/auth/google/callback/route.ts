@@ -67,7 +67,7 @@ export const GET = async (req: NextRequest) => {
 
     } catch {
        // console.log('Error during mongodb query:', error);
-        return NextResponse.json({ error: 'An error occurred during the database query. The database may be temporarily unavailable, please try again.' }, { status: 500 });
+        return NextResponse.json({ error: 'An error occurred during the database query. The database may be temporarily unavailable, please try again. Contact https://www.facebook.com/rjhones11' }, { status: 500 });
     }
 
     const refreshToken = jwt.sign(

@@ -12,6 +12,7 @@ export default function TodoList() {
     const { id: userId } = useAuth()
     const [errMsg, setErrMsg] = useState('')
     const [orderedIds, setOrderedIds] = useState<string[]>([])
+    const [draggedId, setDraggedId] = useState<string | null>(null)
     const draggedIdRef = useRef<string | null>(null)
     const dragOverIdRef = useRef<string | null>(null)
 
@@ -40,6 +41,7 @@ export default function TodoList() {
 
     const handleDragStart = useCallback((id: string) => {
         draggedIdRef.current = id
+        setDraggedId(id)
     }, [])
 
     const handleDragOver = useCallback((e: React.DragEvent, overId: string) => {
@@ -62,6 +64,7 @@ export default function TodoList() {
     const handleDragEnd = useCallback(() => {
         draggedIdRef.current = null
         dragOverIdRef.current = null
+        setDraggedId(null)
     }, [])
 
     // FOR THE TODO WITH ACCOUNT
@@ -79,7 +82,7 @@ export default function TodoList() {
                 {orderedIds.map(todoId => {
                     const todo = data?.entities[todoId] as ITodoDocument & { isTemp: boolean }
                     if (!todo) return null
-                    const isDragging = draggedIdRef.current === todoId
+                    const isDragging = draggedId === todoId
                     return (
                         <div
                             key={todoId}

@@ -1,6 +1,6 @@
 'use client'
 import useAuth from "@/app/hooks/useAuth"
-import { useGetTodosQuery } from "@/app/lib/features/todo/todoApiSlice"
+import { useGetTodosQuery, useReorderTodosMutation } from "@/app/lib/features/todo/todoApiSlice"
 import TodoCard from '../TodoCard'
 import Typography from '@mui/material/Typography'
 import { ITodoDocument } from "@/app/lib/models/todoModel"
@@ -15,6 +15,8 @@ export default function TodoList() {
     const [draggedId, setDraggedId] = useState<string | null>(null)
     const draggedIdRef = useRef<string | null>(null)
     const dragOverIdRef = useRef<string | null>(null)
+    const orderedIdsRef = useRef<string[]>([])
+    const [reorderTodos] = useReorderTodosMutation()
 
     const throwError = useCallback((message: string) => {
         setErrMsg(message)
@@ -35,7 +37,9 @@ export default function TodoList() {
             const newSet = new Set(newIds)
             const filtered = prev.filter(id => newSet.has(id))
             const added = newIds.filter(id => !existingSet.has(id))
-            return [...added, ...filtered]
+            const next = [...added, ...filtered]
+            orderedIdsRef.current = next
+            return next
         })
     }, [data?.ids])
 
@@ -57,6 +61,7 @@ export default function TodoList() {
             const next = [...prev]
             next.splice(fromIndex, 1)
             next.splice(toIndex, 0, draggedIdRef.current!)
+            orderedIdsRef.current = next
             return next
         })
     }, [])
@@ -65,7 +70,10 @@ export default function TodoList() {
         draggedIdRef.current = null
         dragOverIdRef.current = null
         setDraggedId(null)
-    }, [])
+        if (userId) {
+            reorderTodos({ userId, orderedIds: orderedIdsRef.current })
+        }
+    }, [reorderTodos, userId])
 
     // FOR THE TODO WITH ACCOUNT
     if (isLoading) {

@@ -5,15 +5,6 @@ import { setError } from "../error/errorSlice";
 
 const todosAdapter = createEntityAdapter<ITodoDocument, string>({
   selectId: (todo) => (todo.id) as string,
-  sortComparer: (a, b) => {
-    // Prioritize incomplete todos
-    if (a.completed !== b.completed) {
-      return a.completed ? 1 : -1;
-    }
-
-    // If both are the same completion status, sort by updatedAt (newest first)
-    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-  }
 });
 const initialState = todosAdapter.getInitialState();
 
@@ -133,7 +124,28 @@ const todoApiSlice = apiSlice.injectEndpoints({
         }
 
       }
-    })
+    }),
+    reorderTodos: builder.mutation<{ message: string }, { userId: string; orderedIds: string[] }>({
+      query: ({ userId, orderedIds }) => ({
+        url: `/api/todos/reorder/${userId}`,
+        method: 'POST',
+        body: { orderedIds },
+      }),
+      onQueryStarted: async ({ userId, orderedIds }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          todoApiSlice.util.updateQueryData('getTodos', { userId } as { userId: string }, (draft) => {
+            draft.ids = orderedIds;
+          })
+        );
+        try {
+          await queryFulfilled;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          patchResult.undo();
+          dispatch(setError({ message: "Todo order could not be saved: " + error?.error?.data?.message }));
+        }
+      },
+    }),
   }),
 });
 
@@ -141,7 +153,8 @@ export const {
   useGetTodosQuery,
   useAddTodoMutation,
   useDeleteTodoMutation,
-  useCheckTodoMutation
+  useCheckTodoMutation,
+  useReorderTodosMutation
 } = todoApiSlice;
 
 export default todoApiSlice;

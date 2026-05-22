@@ -12,9 +12,7 @@ export default function TodoList() {
     const [orderedIds, setOrderedIds] = useState<string[]>(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('todoOrder')
-            console.log('[TodoList] Initial mount - saved todoOrder:', saved)
             const parsed = saved ? JSON.parse(saved) : []
-            console.log('[TodoList] Initial mount - parsed orderedIds:', parsed)
             return parsed
         }
         return []
@@ -26,7 +24,6 @@ export default function TodoList() {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const todos = JSON.parse(localStorage.getItem('todos') ?? '[]')
-            console.log('[TodoList] Loading todos from localStorage:', todos)
             if (Array.isArray(todos) && todos.length > 0) {
                 dispatch(initializeTodo({ todos }))
             }
@@ -43,9 +40,7 @@ export default function TodoList() {
     // Saves the todo order in localStorage whenever orderedIds changes
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            console.log('[TodoList] orderedIds changed, saving to localStorage:', orderedIds)
             localStorage.setItem('todoOrder', JSON.stringify(orderedIds))
-            console.log('[TodoList] Saved orderedIds to localStorage')
         }
     }, [orderedIds])
 
@@ -55,14 +50,12 @@ export default function TodoList() {
     // new items are placed at the top (honoring the existing sort), deleted items are removed
     useEffect(() => {
         const newIds = offlineTodos.map(t => t.id)
-        console.log('[TodoList] offlineTodos changed, newIds:', newIds)
         setOrderedIds(prev => {
             const existingSet = new Set(prev)
             const newSet = new Set(newIds)
             const filtered = prev.filter(id => newSet.has(id))
             const added = newIds.filter(id => !existingSet.has(id))
             const result = [...added, ...filtered]
-            console.log('[TodoList] Merged order - prev:', prev, 'result:', result)
             return result
         })
     }, [offlineTodos])
@@ -77,7 +70,6 @@ export default function TodoList() {
         // Skip if still over the same element to avoid excessive state updates
         if (dragOverIdRef.current === overId) return
         dragOverIdRef.current = overId
-        console.log('[TodoList] Dragging', draggedIdRef.current, 'over', overId)
         setOrderedIds(prev => {
             const fromIndex = prev.indexOf(draggedIdRef.current!)
             const toIndex = prev.indexOf(overId)
@@ -85,23 +77,18 @@ export default function TodoList() {
             const next = [...prev]
             next.splice(fromIndex, 1)
             next.splice(toIndex, 0, draggedIdRef.current!)
-            console.log('[TodoList] New order after drag:', next)
             return next
         })
     }, [])
 
     const handleDragEnd = useCallback(() => {
-        console.log('[TodoList] Drag ended, current orderedIds:', orderedIds)
         draggedIdRef.current = null
         dragOverIdRef.current = null
         // Save order to localStorage after drag completes
         if (typeof window !== 'undefined') {
-            console.log('[TodoList] Saving order after drag end:', orderedIds)
             localStorage.setItem('todoOrder', JSON.stringify(orderedIds))
-            console.log('[TodoList] Order saved to localStorage')
             // Reorder Redux todos to match the user's drag order
             if (orderedIds.length > 0) {
-                console.log('[TodoList] Reordering todos to match drag order:', orderedIds)
                 dispatch(reorderTodos({ orderedIds }))
             }
         }
